@@ -1,6 +1,7 @@
 import { useEffect, useRef } from 'react'
 import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
+import TextRevealOnScroll from '../components/effects/TextRevealOnScroll'
 
 gsap.registerPlugin(ScrollTrigger)
 
@@ -8,28 +9,16 @@ const tags = ['Metabólica', 'Evidencia', 'Humanidad']
 
 export default function Philosophy() {
   const sectionRef = useRef<HTMLElement>(null)
-  const textRef = useRef<HTMLParagraphElement>(null)
   const tagsRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
     const section = sectionRef.current
-    const text = textRef.current
     const tagsEl = tagsRef.current
-    if (!section || !text || !tagsEl) return
+    if (!section || !tagsEl) return
 
     const ctx = gsap.context(() => {
-      gsap.from(text, {
-        y: 60,
-        opacity: 0,
-        duration: 1.2,
-        ease: 'power3.out',
-        scrollTrigger: {
-          trigger: section,
-          start: 'top 75%',
-          once: true,
-        },
-      })
-
+      // Note: paragraph animation now handled by TextRevealOnScroll component
+      // (motion-based scroll-linked reveal). Tags keep their GSAP stagger.
       gsap.from(tagsEl.children, {
         y: 30,
         opacity: 0,
@@ -65,8 +54,8 @@ export default function Philosophy() {
           alignItems: 'flex-start',
         }}
       >
-        <p
-          ref={textRef}
+        <TextRevealOnScroll
+          text="La obesidad es una enfermedad metabólica crónica, no un fallo de carácter. En Centro NextHorizont Health combinamos rigor clínico, tecnología responsable y trato humano para devolver el control a nuestros pacientes."
           style={{
             flex: '1 1 700px',
             fontSize: 'clamp(28px, 4vw, 60px)',
@@ -75,13 +64,9 @@ export default function Philosophy() {
             letterSpacing: '-0.02em',
             color: '#000000',
             maxWidth: '1200px',
+            margin: 0,
           }}
-        >
-          La obesidad es una enfermedad metabólica crónica, no un fallo de
-          carácter. En Centro NextHorizont Health combinamos rigor clínico, tecnología
-          responsable y trato humano para devolver el control a nuestros
-          pacientes.
-        </p>
+        />
 
         <div
           ref={tagsRef}

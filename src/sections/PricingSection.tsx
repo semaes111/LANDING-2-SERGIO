@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
+import WordsPullUp from '../components/effects/WordsPullUp'
 
 gsap.registerPlugin(ScrollTrigger)
 
@@ -113,17 +114,18 @@ export default function PricingSection() {
           >
             Puertas de entrada
           </p>
-          <h2
+          <WordsPullUp
+            text="Elige tu punto de partida"
+            as="h2"
             style={{
               fontSize: 'clamp(32px, 4.5vw, 56px)',
               fontWeight: 400,
               letterSpacing: '-0.03em',
               lineHeight: 1.05,
               color: '#000000',
+              margin: 0,
             }}
-          >
-            Elige tu punto de partida
-          </h2>
+          />
         </div>
 
         <div
