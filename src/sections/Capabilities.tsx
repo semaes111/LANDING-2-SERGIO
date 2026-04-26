@@ -3,7 +3,7 @@ import gsap from 'gsap'
 
 const services: { label: string; detail: string }[] = [
   { label: 'Reset Metabólico', detail: 'Programa integral 90 días con GLP-1, nutrición y seguimiento médico continuo' },
-  { label: 'Consulta GLP-1', detail: 'Primera visita 45 min con evaluación de candidatura y prescripción individualizada' },
+  { label: 'Consulta GLP-1', detail: 'Primera visita con evaluación de candidatura y prescripción individualizada' },
   { label: 'Cursos de Nutrición', detail: 'Formación digital en nutrición clínica basada en evidencia científica actualizada' },
   { label: 'Guías para Comer', detail: 'Recursos prácticos de reeducación alimentaria y hábitos metabólicos sostenibles' },
   { label: 'Control de Peso', detail: 'Membership mensual con revisión médica, ajuste de dosis y app de seguimiento' },

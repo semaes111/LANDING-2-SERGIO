@@ -6,21 +6,36 @@ gsap.registerPlugin(ScrollTrigger)
 
 const plans = [
   {
-    name: 'Consulta',
+    name: 'Primera consulta',
     price: '99€',
-    period: 'visita única',
+    period: 'primera visita',
     features: [
       'Pre-evaluación IA (gratuita)',
-      'Consulta médica 45 min',
+      'Consulta médica con Dr. Martínez Escobar',
       'Plan individualizado',
       'Receta GLP-1 (si procede)',
+      'WhatsApp directo para preguntas',
+    ],
+    cta: 'Reservar',
+    highlighted: false,
+  },
+  {
+    name: 'Seguimiento',
+    price: '79€',
+    period: 'visita seguimiento',
+    features: [
+      'Revisión clínica con Dr.',
+      'Ajuste de dosis si procede',
+      'Evaluación de tolerancia',
+      'Renovación de prescripción',
+      'WhatsApp directo para preguntas',
     ],
     cta: 'Reservar',
     highlighted: false,
   },
   {
     name: 'Membership Reset',
-    price: '49-79€',
+    price: '79€',
     period: '/ mes',
     features: [
       'Todo lo anterior',
@@ -28,6 +43,7 @@ const plans = [
       'Recordatorios de adherencia',
       'Acceso a app',
       'Ajuste de dosis continuo',
+      'WhatsApp directo para preguntas',
     ],
     cta: 'Empezar →',
     highlighted: true,
@@ -41,6 +57,7 @@ const plans = [
       'Curso digital Reset 90 días',
       'Comunidad privada premium',
       'Sesiones live con el equipo',
+      'WhatsApp directo para preguntas',
       'Garantía 30 días',
     ],
     cta: 'Inscribirme',
