@@ -1,58 +1,110 @@
 import { useEffect, useRef, useState } from 'react'
 import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
+import { CheckCheck, Stethoscope, Pill, Sparkles, ClipboardCheck, ShieldCheck, Video } from 'lucide-react'
+import NumberFlow from '@number-flow/react'
 import WordsPullUp from '../components/effects/WordsPullUp'
 import TiltCard from '../components/effects/TiltCard'
 import GlareCard from '../components/effects/GlareCard'
+import { Card, CardContent, CardHeader } from '../components/ui/card'
 
 gsap.registerPlugin(ScrollTrigger)
 
-const plans = [
+/**
+ * Pricing Section — Centro NextHorizont Health
+ *
+ * Visual style adapted from a 21st.dev/shadcn pricing component, but tailored
+ * for a sober medical brand:
+ *   - Black/white palette (no blue gradients) — matches the rest of the site
+ *   - €, not $
+ *   - 3 plans (no Monthly/Yearly toggle — irrelevant for a clinic)
+ *   - secondaryPrice on Seguimiento card (79€ visit + 29€ prescription renewal)
+ *   - Programa 90D is the highlighted plan (Glare Card sheen + thick black border + 'Recomendado' badge)
+ *   - 3D TiltCard wraps every card (max 6° tilt — subtle medical feel)
+ *   - WordsPullUp on the section heading (kept from previous implementation)
+ *   - NumberFlow for animated price numbers when card enters viewport
+ *
+ * Architectural decisions:
+ *   - Uses shadcn's Card from /src/components/ui/card.tsx (already in project).
+ *   - Tailwind utility classes drive flex/sizing; inline styles cover colors/typography
+ *     to stay consistent with the rest of the site's pattern.
+ *   - 'features' array uses {text, icon} pairs with medical icons.
+ *   - 'includes' subsection preserved from source pattern (with checkmarks).
+ */
+
+type Feature = { text: string; icon: React.ReactNode }
+type Plan = {
+  name: string
+  description: string
+  price: number
+  period: string
+  secondaryPrice: { price: number; label: string } | null
+  buttonText: string
+  highlighted: boolean
+  features: Feature[]
+  includes: string[]
+}
+
+const plans: Plan[] = [
   {
     name: 'Primera consulta',
-    price: '99€',
+    description: 'Para quienes empiezan: evaluación clínica completa y plan personalizado.',
+    price: 99,
     period: 'primera visita',
-    secondaryPrice: null as { price: string; label: string } | null,
-    features: [
-      'Pre-evaluación IA (gratuita)',
-      'Consulta médica con Dr. Martínez Escobar',
-      'Plan individualizado',
-      'Receta GLP-1 (si procede)',
-      'WhatsApp directo para preguntas',
-    ],
-    cta: 'Reservar',
+    secondaryPrice: null,
+    buttonText: 'Reservar',
     highlighted: false,
+    features: [
+      { text: 'Pre-evaluación con IA (gratuita)', icon: <Sparkles size={18} /> },
+      { text: 'Consulta médica con Dr. Martínez Escobar', icon: <Stethoscope size={18} /> },
+      { text: 'Plan individualizado y receta GLP-1 si procede', icon: <Pill size={18} /> },
+    ],
+    includes: [
+      'Incluye:',
+      'WhatsApp directo para preguntas',
+      'Modalidad presencial u online',
+      'Sin permanencia',
+    ],
   },
   {
     name: 'Seguimiento',
-    price: '79€',
+    description: 'Para pacientes en tratamiento: revisión clínica continua y ajuste de dosis.',
+    price: 79,
     period: 'visita seguimiento',
-    secondaryPrice: { price: '29€', label: 'renovación de receta sin consulta' },
-    features: [
-      'Revisión clínica con Dr.',
-      'Ajuste de dosis si procede',
-      'Evaluación de tolerancia',
-      'Renovación de prescripción',
-      'WhatsApp directo para preguntas',
-    ],
-    cta: 'Reservar',
+    secondaryPrice: { price: 29, label: 'renovación de receta sin consulta' },
+    buttonText: 'Reservar',
     highlighted: false,
+    features: [
+      { text: 'Revisión clínica con el Dr.', icon: <ClipboardCheck size={18} /> },
+      { text: 'Ajuste de dosis y evaluación de tolerancia', icon: <Pill size={18} /> },
+      { text: 'Renovación de prescripción incluida', icon: <ShieldCheck size={18} /> },
+    ],
+    includes: [
+      'Incluye:',
+      'WhatsApp directo para preguntas',
+      'Telemedicina disponible',
+      'Cancelación gratuita 24h antes',
+    ],
   },
   {
     name: 'Programa 90D',
-    price: '499€',
+    description: 'El programa completo: acompañamiento médico durante 90 días con resultados sostenibles.',
+    price: 499,
     period: 'pago único',
-    secondaryPrice: null as { price: string; label: string } | null,
+    secondaryPrice: null,
+    buttonText: 'Inscribirme',
+    highlighted: true,
     features: [
-      'Primera consulta + 2 seguimientos incluidos',
-      'Curso digital Reset 90 días',
+      { text: '1 primera consulta + 2 seguimientos', icon: <Stethoscope size={18} /> },
+      { text: 'Curso digital Reset 90 días', icon: <ClipboardCheck size={18} /> },
+      { text: 'Sesiones live con el equipo médico', icon: <Video size={18} /> },
+    ],
+    includes: [
+      'Todo lo anterior, más:',
       'Comunidad privada premium',
-      'Sesiones live con el equipo',
-      'WhatsApp directo para preguntas',
+      'WhatsApp directo prioritario',
       'Garantía 30 días',
     ],
-    cta: 'Inscribirme',
-    highlighted: true,
   },
 ]
 
@@ -64,15 +116,15 @@ export default function PricingSection() {
     if (!section) return
 
     const ctx = gsap.context(() => {
-      gsap.from('.pricing-card', {
-        y: 60,
+      gsap.from('.pricing-card-anim', {
+        y: 40,
         opacity: 0,
         duration: 0.9,
         stagger: 0.12,
         ease: 'power3.out',
         scrollTrigger: {
           trigger: section,
-          start: 'top 70%',
+          start: 'top 65%',
           once: true,
         },
       })
@@ -116,32 +168,46 @@ export default function PricingSection() {
               margin: 0,
             }}
           />
+          <p
+            style={{
+              fontSize: '15px',
+              lineHeight: 1.6,
+              color: '#666666',
+              marginTop: '20px',
+              maxWidth: '600px',
+              marginLeft: 'auto',
+              marginRight: 'auto',
+            }}
+          >
+            Elige cómo empezar. Todos los planes incluyen acceso directo al equipo médico.
+          </p>
         </div>
 
         <div
           style={{
             display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 300px), 1fr))',
-            gap: '2px',
-            backgroundColor: '#1a1a1a',
-            border: '1px solid #1a1a1a',
+            gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 320px), 1fr))',
+            gap: '24px',
+            alignItems: 'stretch',
           }}
         >
           {plans.map((plan) => (
-            <TiltCard key={plan.name} maxTilt={6} scaleOnHover={1.015}>
-              {plan.highlighted ? (
-                <GlareCard>
-                  <PricingCard plan={plan} />
-                </GlareCard>
-              ) : (
-                <PricingCard plan={plan} />
-              )}
-            </TiltCard>
+            <div key={plan.name} className="pricing-card-anim" style={{ display: 'flex' }}>
+              <TiltCard maxTilt={6} scaleOnHover={1.015} style={{ width: '100%', display: 'flex' }}>
+                {plan.highlighted ? (
+                  <GlareCard style={{ width: '100%', borderRadius: '16px' }}>
+                    <PricingCardContent plan={plan} />
+                  </GlareCard>
+                ) : (
+                  <PricingCardContent plan={plan} />
+                )}
+              </TiltCard>
+            </div>
           ))}
         </div>
 
         {/* FAQ */}
-        <div style={{ marginTop: '64px', maxWidth: '800px', marginLeft: 'auto', marginRight: 'auto' }}>
+        <div style={{ marginTop: '88px', maxWidth: '800px', marginLeft: 'auto', marginRight: 'auto' }}>
           <p
             style={{
               fontSize: '11px',
@@ -165,7 +231,7 @@ export default function PricingSection() {
           />
           <FAQItem
             q="¿Reembolso?"
-            a="30 días de garantía en el programa 90D. Membership cancelable en cualquier momento."
+            a="30 días de garantía en el programa 90D. Cancelable en cualquier momento."
           />
           <FAQItem
             q="¿Telemedicina?"
@@ -177,58 +243,93 @@ export default function PricingSection() {
   )
 }
 
-function PricingCard({ plan }: { plan: typeof plans[0] }) {
-  const [hovered, setHovered] = useState(false)
+function PricingCardContent({ plan }: { plan: Plan }) {
   const isHighlight = plan.highlighted
 
+  const handleCTA = () => {
+    document.querySelector('#hero')?.scrollIntoView({ behavior: 'smooth' })
+  }
+
   return (
-    <div
-      className="pricing-card"
-      onMouseEnter={() => setHovered(true)}
-      onMouseLeave={() => setHovered(false)}
+    <Card
+      className="relative w-full h-full flex flex-col"
       style={{
-        backgroundColor: isHighlight ? '#000000' : '#ffffff',
-        padding: '40px 32px',
-        display: 'flex',
-        flexDirection: 'column',
-        gap: '20px',
-        transition: 'transform 0.25s ease, box-shadow 0.25s ease',
-        transform: hovered ? 'translateY(-4px)' : 'translateY(0)',
-        boxShadow: hovered ? '0 12px 32px rgba(0,0,0,0.12)' : 'none',
+        backgroundColor: isHighlight ? '#0a0a0a' : '#ffffff',
+        borderColor: isHighlight ? '#0a0a0a' : '#e5e5e5',
+        borderWidth: isHighlight ? '2px' : '1px',
+        borderRadius: '16px',
+        boxShadow: isHighlight
+          ? '0 20px 50px rgba(0,0,0,0.18)'
+          : '0 4px 12px rgba(0,0,0,0.04)',
       }}
     >
-      <p
-        style={{
-          fontSize: '11px',
-          fontWeight: 500,
-          letterSpacing: '0.24em',
-          color: isHighlight ? 'rgba(255,255,255,0.6)' : 'rgba(0,0,0,0.5)',
-          textTransform: 'uppercase',
-        }}
-      >
-        {plan.name}
-      </p>
-      <div>
-        <p
-          style={{
-            fontSize: 'clamp(36px, 4vw, 52px)',
-            fontWeight: 400,
-            letterSpacing: '-0.03em',
-            lineHeight: 1,
-            color: isHighlight ? '#ffffff' : '#000000',
-            marginBottom: '6px',
-          }}
-        >
-          {plan.price}
-        </p>
+      <CardHeader className="text-left" style={{ padding: '32px 28px 12px' }}>
+        <div className="flex items-start justify-between" style={{ gap: '12px' }}>
+          <h3
+            style={{
+              fontSize: 'clamp(22px, 2.4vw, 28px)',
+              fontWeight: 500,
+              letterSpacing: '-0.02em',
+              lineHeight: 1.1,
+              color: isHighlight ? '#ffffff' : '#0a0a0a',
+              margin: 0,
+            }}
+          >
+            {plan.name}
+          </h3>
+          {isHighlight && (
+            <span
+              style={{
+                fontSize: '10px',
+                fontWeight: 500,
+                letterSpacing: '0.16em',
+                textTransform: 'uppercase',
+                color: '#0a0a0a',
+                backgroundColor: '#ffffff',
+                padding: '6px 12px',
+                borderRadius: '999px',
+                whiteSpace: 'nowrap',
+                flexShrink: 0,
+              }}
+            >
+              Recomendado
+            </span>
+          )}
+        </div>
         <p
           style={{
             fontSize: '13px',
+            lineHeight: 1.5,
             color: isHighlight ? 'rgba(255,255,255,0.7)' : '#666666',
+            margin: '12px 0 22px',
           }}
         >
-          {plan.period}
+          {plan.description}
         </p>
+        <div style={{ display: 'flex', alignItems: 'baseline', gap: '8px' }}>
+          <span
+            style={{
+              fontSize: 'clamp(40px, 5vw, 56px)',
+              fontWeight: 500,
+              letterSpacing: '-0.04em',
+              lineHeight: 1,
+              color: isHighlight ? '#ffffff' : '#0a0a0a',
+              display: 'inline-flex',
+              alignItems: 'baseline',
+            }}
+          >
+            <NumberFlow value={plan.price} />
+            <span style={{ marginLeft: '2px' }}>€</span>
+          </span>
+          <span
+            style={{
+              fontSize: '13px',
+              color: isHighlight ? 'rgba(255,255,255,0.6)' : '#888888',
+            }}
+          >
+            / {plan.period}
+          </span>
+        </div>
         {plan.secondaryPrice && (
           <div
             style={{
@@ -236,7 +337,7 @@ function PricingCard({ plan }: { plan: typeof plans[0] }) {
               paddingTop: '16px',
               borderTop: isHighlight
                 ? '1px solid rgba(255,255,255,0.18)'
-                : '1px solid rgba(0,0,0,0.12)',
+                : '1px solid #e5e5e5',
               display: 'flex',
               alignItems: 'baseline',
               gap: '10px',
@@ -246,13 +347,16 @@ function PricingCard({ plan }: { plan: typeof plans[0] }) {
             <span
               style={{
                 fontSize: 'clamp(20px, 2vw, 26px)',
-                fontWeight: 400,
+                fontWeight: 500,
                 letterSpacing: '-0.02em',
                 lineHeight: 1,
-                color: isHighlight ? '#ffffff' : '#000000',
+                color: isHighlight ? '#ffffff' : '#0a0a0a',
+                display: 'inline-flex',
+                alignItems: 'baseline',
               }}
             >
-              {plan.secondaryPrice.price}
+              <NumberFlow value={plan.secondaryPrice.price} />
+              <span style={{ marginLeft: '2px' }}>€</span>
             </span>
             <span
               style={{
@@ -265,64 +369,145 @@ function PricingCard({ plan }: { plan: typeof plans[0] }) {
             </span>
           </div>
         )}
-      </div>
-      <ul
-        style={{
-          listStyle: 'none',
-          padding: 0,
-          margin: '12px 0 0',
-          display: 'flex',
-          flexDirection: 'column',
-          gap: '10px',
-        }}
-      >
-        {plan.features.map((f) => (
-          <li
-            key={f}
-            style={{
-              fontSize: '14px',
-              lineHeight: 1.5,
-              color: isHighlight ? 'rgba(255,255,255,0.85)' : '#333333',
-              paddingLeft: '16px',
-              position: 'relative',
-            }}
-          >
-            <span
-              style={{
-                position: 'absolute',
-                left: 0,
-                top: '8px',
-                width: '5px',
-                height: '1px',
-                backgroundColor: isHighlight ? '#ffffff' : '#000000',
-              }}
-            />
-            {f}
-          </li>
-        ))}
-      </ul>
-      <div style={{ marginTop: 'auto', paddingTop: '20px' }}>
+      </CardHeader>
+
+      <CardContent className="flex-1 flex flex-col" style={{ padding: '12px 28px 28px' }}>
         <button
-          onClick={() => document.querySelector('#hero')?.scrollIntoView({ behavior: 'smooth' })}
+          onClick={handleCTA}
           style={{
             width: '100%',
-            fontSize: '13px',
-            fontWeight: 500,
-            letterSpacing: '0.14em',
-            color: isHighlight ? '#000000' : '#ffffff',
-            backgroundColor: isHighlight ? '#ffffff' : '#000000',
-            border: '1px solid #000000',
             padding: '14px 24px',
-            cursor: 'pointer',
+            fontSize: '14px',
+            fontWeight: 500,
+            letterSpacing: '0.06em',
             textTransform: 'uppercase',
-            transition: 'all 0.25s ease',
+            color: isHighlight ? '#0a0a0a' : '#ffffff',
+            backgroundColor: isHighlight ? '#ffffff' : '#0a0a0a',
+            border: 'none',
+            borderRadius: '10px',
+            cursor: 'pointer',
+            transition: 'transform 0.18s ease, box-shadow 0.18s ease',
             fontFamily: '"Helvetica Neue", sans-serif',
+            marginBottom: '24px',
+            boxShadow: isHighlight ? '0 4px 14px rgba(255,255,255,0.18)' : '0 4px 14px rgba(0,0,0,0.18)',
+          }}
+          onMouseEnter={(e) => {
+            ;(e.currentTarget as HTMLButtonElement).style.transform = 'translateY(-1px)'
+          }}
+          onMouseLeave={(e) => {
+            ;(e.currentTarget as HTMLButtonElement).style.transform = 'translateY(0)'
           }}
         >
-          {plan.cta}
+          {plan.buttonText}
         </button>
-      </div>
-    </div>
+
+        <ul
+          style={{
+            listStyle: 'none',
+            padding: 0,
+            margin: 0,
+            display: 'flex',
+            flexDirection: 'column',
+            gap: '14px',
+          }}
+        >
+          {plan.features.map((f, i) => (
+            <li
+              key={i}
+              style={{
+                display: 'flex',
+                alignItems: 'flex-start',
+                gap: '12px',
+                fontSize: '13.5px',
+                lineHeight: 1.5,
+                color: isHighlight ? 'rgba(255,255,255,0.85)' : '#333333',
+              }}
+            >
+              <span
+                style={{
+                  flexShrink: 0,
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  color: isHighlight ? 'rgba(255,255,255,0.85)' : '#0a0a0a',
+                  paddingTop: '2px',
+                }}
+              >
+                {f.icon}
+              </span>
+              <span>{f.text}</span>
+            </li>
+          ))}
+        </ul>
+
+        <div
+          style={{
+            marginTop: '28px',
+            paddingTop: '20px',
+            borderTop: isHighlight
+              ? '1px solid rgba(255,255,255,0.18)'
+              : '1px solid #e5e5e5',
+          }}
+        >
+          <h4
+            style={{
+              fontSize: '13px',
+              fontWeight: 500,
+              color: isHighlight ? '#ffffff' : '#0a0a0a',
+              margin: '0 0 14px',
+            }}
+          >
+            {plan.includes[0]}
+          </h4>
+          <ul
+            style={{
+              listStyle: 'none',
+              padding: 0,
+              margin: 0,
+              display: 'flex',
+              flexDirection: 'column',
+              gap: '10px',
+            }}
+          >
+            {plan.includes.slice(1).map((item, i) => (
+              <li
+                key={i}
+                style={{
+                  display: 'flex',
+                  alignItems: 'flex-start',
+                  gap: '10px',
+                  fontSize: '13px',
+                  lineHeight: 1.5,
+                  color: isHighlight ? 'rgba(255,255,255,0.75)' : '#555555',
+                }}
+              >
+                <span
+                  style={{
+                    flexShrink: 0,
+                    display: 'inline-flex',
+                    width: '20px',
+                    height: '20px',
+                    borderRadius: '50%',
+                    border: isHighlight ? '1px solid rgba(255,255,255,0.4)' : '1px solid #0a0a0a',
+                    backgroundColor: isHighlight ? 'rgba(255,255,255,0.08)' : '#f4f4f5',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    marginTop: '1px',
+                  }}
+                >
+                  <CheckCheck
+                    size={12}
+                    color={isHighlight ? '#ffffff' : '#0a0a0a'}
+                    strokeWidth={2.4}
+                  />
+                </span>
+                <span>{item}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </CardContent>
+    </Card>
   )
 }
 
