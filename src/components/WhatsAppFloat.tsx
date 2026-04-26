@@ -119,6 +119,11 @@ export default function WhatsAppFloat() {
           70%  { transform: scale(1.6); opacity: 0;   }
           100% { transform: scale(1.6); opacity: 0;   }
         }
+        @media (max-width: 768px) {
+          a[aria-label="Contactar por WhatsApp con Centro NextHorizont Health"] {
+            bottom: calc(96px + env(safe-area-inset-bottom, 0px)) !important;
+          }
+        }
         @media (max-width: 640px) {
           a[aria-label="Contactar por WhatsApp con Centro NextHorizont Health"] span:first-child {
             display: none;

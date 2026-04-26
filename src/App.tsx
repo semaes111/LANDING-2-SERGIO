@@ -23,6 +23,7 @@ import LocationSection from './sections/LocationSection'
 import LogosBar from './sections/LogosBar'
 import TechShowcase from './sections/TechShowcase'
 import WhatsAppFloat from './components/WhatsAppFloat'
+import MobileStickyCTA from './components/MobileStickyCTA'
 import SmoothScroll from './components/effects/SmoothScroll'
 
 function App() {
@@ -90,6 +91,7 @@ function App() {
         } />
       </Routes>
       <WhatsAppFloat />
+      <MobileStickyCTA />
     </SmoothScroll>
   )
 }

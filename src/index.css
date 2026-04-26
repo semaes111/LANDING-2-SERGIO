@@ -40,6 +40,15 @@
     line-height: 1.6;
   }
 
+  /* MobileStickyCTA clearance — adds space at the bottom so the sticky bar
+     doesn't cover the last scroll content (e.g., footer links).
+     Mobile only (≤768px). Includes safe-area for iPhone notch. */
+  @media (max-width: 768px) {
+    body {
+      padding-bottom: calc(80px + env(safe-area-inset-bottom, 0px));
+    }
+  }
+
   ::selection {
     background-color: #000000;
     color: #ffffff;
