@@ -97,7 +97,7 @@ export default function Spatial() {
             textTransform: 'uppercase',
           }}
         >
-          Salud Metabólica · Centro NICA · El Ejido
+          Salud Metabólica · Centro NextHorizont Health · El Ejido
         </span>
 
         <h1

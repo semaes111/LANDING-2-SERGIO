@@ -77,7 +77,7 @@ export default function DoctorSection() {
                 textTransform: 'uppercase',
               }}
             >
-              Director Médico · Centro NICA
+              Director Médico · Centro NextHorizont Health
             </p>
           </div>
         </div>
@@ -140,7 +140,7 @@ export default function DoctorSection() {
               'Postdoctorado en Arizona State University',
               'Postdoctorado en Georgia Institute of Technology',
               '50+ publicaciones internacionales indexadas',
-              'Director de Centro NICA (480 pacientes/mes)',
+              'Director de Centro NextHorizont Health (480 pacientes/mes)',
               'Ponente en congresos SEEDO y SEMICYUC',
             ].map((item) => (
               <li

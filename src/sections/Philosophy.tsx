@@ -78,7 +78,7 @@ export default function Philosophy() {
           }}
         >
           La obesidad es una enfermedad metabólica crónica, no un fallo de
-          carácter. En Centro NICA combinamos rigor clínico, tecnología
+          carácter. En Centro NextHorizont Health combinamos rigor clínico, tecnología
           responsable y trato humano para devolver el control a nuestros
           pacientes.
         </p>

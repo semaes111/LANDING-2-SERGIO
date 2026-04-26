@@ -28,7 +28,7 @@ export default function Capabilities() {
     >
       <img
         src="/images/equipo-medico.jpg"
-        alt="Equipo médico de Centro NICA en reunión clínica"
+        alt="Equipo médico de Centro NextHorizont Health en reunión clínica"
         style={{
           position: 'absolute',
           top: 0,
@@ -102,7 +102,7 @@ export default function Capabilities() {
                 maxWidth: '640px',
               }}
             >
-              Desde la primera consulta médica hasta el seguimiento a largo plazo, cada servicio de Centro NICA está diseñado con rigor clínico y tecnología responsable. Un resumen de lo que ofrecemos a pacientes y profesionales:
+              Desde la primera consulta médica hasta el seguimiento a largo plazo, cada servicio de Centro NextHorizont Health está diseñado con rigor clínico y tecnología responsable. Un resumen de lo que ofrecemos a pacientes y profesionales:
             </p>
           </div>
           <div
@@ -217,7 +217,7 @@ function OrbitalBadge() {
     path.setAttribute('id', pathId)
     path.setAttribute('fill', 'none')
 
-    const textContent = 'NEXTHORIZONT \u2022 SALUD METABOLICA \u2022 CENTRO NICA \u2022 '
+    const textContent = 'NEXTHORIZONT \u2022 SALUD METABOLICA \u2022 CENTRO NEXTHORIZONT HEALTH \u2022 '
 
     const textEl = document.createElementNS('http://www.w3.org/2000/svg', 'text')
     textEl.setAttribute('fill', '#ffffff')

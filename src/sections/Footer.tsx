@@ -66,8 +66,9 @@ export default function Footer() {
           </p>
           <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: '10px' }}>
             <FooterLink to="/#equipo">Equipo</FooterLink>
-            <FooterLink to="/#ubicacion">Centro NICA</FooterLink>
+            <FooterLink to="/#ubicacion">Centro NextHorizont Health</FooterLink>
             <FooterLink to="/#hero">Telemedicina</FooterLink>
+            <FooterLink to="https://cursos.nexthorizont.com" external>Campus de cursos ↗</FooterLink>
             <FooterLink to="/#ubicacion">Contacto</FooterLink>
           </ul>
         </div>
@@ -196,7 +197,7 @@ export default function Footer() {
   )
 }
 
-function FooterLink({ to, children }: { to: string; children: React.ReactNode }) {
+function FooterLink({ to, children, external }: { to: string; children: React.ReactNode; external?: boolean }) {
   const isHash = to.startsWith('/#')
   const handleClick = (e: React.MouseEvent) => {
     if (isHash) {
@@ -204,6 +205,34 @@ function FooterLink({ to, children }: { to: string; children: React.ReactNode })
       const id = to.replace('/#', '')
       document.querySelector(`#${id}`)?.scrollIntoView({ behavior: 'smooth' })
     }
+  }
+
+  // External links open in new tab and bypass react-router
+  if (external) {
+    return (
+      <li>
+        <a
+          href={to}
+          target="_blank"
+          rel="noopener noreferrer"
+          style={{
+            fontSize: '14px',
+            color: '#666666',
+            textDecoration: 'none',
+            transition: 'color 0.2s ease',
+            display: 'inline-block',
+          }}
+          onMouseEnter={(e) => {
+            ;(e.target as HTMLElement).style.color = '#000000'
+          }}
+          onMouseLeave={(e) => {
+            ;(e.target as HTMLElement).style.color = '#666666'
+          }}
+        >
+          {children}
+        </a>
+      </li>
+    )
   }
 
   return (

@@ -21,7 +21,7 @@ export const rooms: Room[] = [
     img: '/images/program-reset.jpg',
     tagline: 'Programa integral de transformación metabólica con seguimiento médico continuo.',
     description: [
-      'El programa Reset Metabólico 90 días es el protocolo principal de Centro NICA. Diseñado en torno a una evaluación metabólica completa, combina tratamiento farmacológico individualizado (GLP-1), educación nutricional personalizada y seguimiento asistido por IA.',
+      'El programa Reset Metabólico 90 días es el protocolo principal de Centro NextHorizont Health. Diseñado en torno a una evaluación metabólica completa, combina tratamiento farmacológico individualizado (GLP-1), educación nutricional personalizada y seguimiento asistido por IA.',
       'Cada paciente recibe un plan de dosis escalonado, recordatorios de adherencia, revisiones médicas programadas y acceso a la comunidad privada. La medicina del siglo XXI combina rigor clínico, tecnología responsable y trato humano.',
     ],
     features: [
