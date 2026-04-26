@@ -183,7 +183,8 @@ export default function DoctorSection() {
           >
             <div style={{ textAlign: 'left' }}>
               <NumberTicker
-                value={480}
+                value={5000}
+                prefix="+"
                 style={{
                   fontSize: 'clamp(36px, 4vw, 48px)',
                   fontWeight: 400,
@@ -204,7 +205,7 @@ export default function DoctorSection() {
                   margin: '8px 0 0',
                 }}
               >
-                Pacientes / mes
+                Pacientes atendidos
               </p>
             </div>
 

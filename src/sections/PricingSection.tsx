@@ -95,7 +95,7 @@ const plans: Plan[] = [
     buttonText: 'Inscribirme',
     highlighted: true,
     features: [
-      { text: '1 primera consulta + 2 seguimientos', icon: <Stethoscope size={18} /> },
+      { text: '1 primera consulta + 4 seguimientos', icon: <Stethoscope size={18} /> },
       { text: 'Curso digital Reset 90 días', icon: <ClipboardCheck size={18} /> },
       { text: 'Sesiones live con el equipo médico', icon: <Video size={18} /> },
     ],
