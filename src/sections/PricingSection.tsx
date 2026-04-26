@@ -12,6 +12,7 @@ const plans = [
     name: 'Primera consulta',
     price: '99€',
     period: 'primera visita',
+    secondaryPrice: null as { price: string; label: string } | null,
     features: [
       'Pre-evaluación IA (gratuita)',
       'Consulta médica con Dr. Martínez Escobar',
@@ -26,6 +27,7 @@ const plans = [
     name: 'Seguimiento',
     price: '79€',
     period: 'visita seguimiento',
+    secondaryPrice: { price: '29€', label: 'renovación de receta sin consulta' },
     features: [
       'Revisión clínica con Dr.',
       'Ajuste de dosis si procede',
@@ -37,26 +39,12 @@ const plans = [
     highlighted: false,
   },
   {
-    name: 'Membership Reset',
-    price: '79€',
-    period: '/ mes',
-    features: [
-      'Todo lo anterior',
-      'Seguimiento mensual con Dr.',
-      'Recordatorios de adherencia',
-      'Acceso a app',
-      'Ajuste de dosis continuo',
-      'WhatsApp directo para preguntas',
-    ],
-    cta: 'Empezar →',
-    highlighted: true,
-  },
-  {
     name: 'Programa 90D',
     price: '499€',
     period: 'pago único',
+    secondaryPrice: null as { price: string; label: string } | null,
     features: [
-      'Todo lo anterior',
+      'Primera consulta + 2 seguimientos incluidos',
       'Curso digital Reset 90 días',
       'Comunidad privada premium',
       'Sesiones live con el equipo',
@@ -64,7 +52,7 @@ const plans = [
       'Garantía 30 días',
     ],
     cta: 'Inscribirme',
-    highlighted: false,
+    highlighted: true,
   },
 ]
 
@@ -241,6 +229,42 @@ function PricingCard({ plan }: { plan: typeof plans[0] }) {
         >
           {plan.period}
         </p>
+        {plan.secondaryPrice && (
+          <div
+            style={{
+              marginTop: '20px',
+              paddingTop: '16px',
+              borderTop: isHighlight
+                ? '1px solid rgba(255,255,255,0.18)'
+                : '1px solid rgba(0,0,0,0.12)',
+              display: 'flex',
+              alignItems: 'baseline',
+              gap: '10px',
+              flexWrap: 'wrap',
+            }}
+          >
+            <span
+              style={{
+                fontSize: 'clamp(20px, 2vw, 26px)',
+                fontWeight: 400,
+                letterSpacing: '-0.02em',
+                lineHeight: 1,
+                color: isHighlight ? '#ffffff' : '#000000',
+              }}
+            >
+              {plan.secondaryPrice.price}
+            </span>
+            <span
+              style={{
+                fontSize: '12px',
+                lineHeight: 1.4,
+                color: isHighlight ? 'rgba(255,255,255,0.7)' : '#666666',
+              }}
+            >
+              {plan.secondaryPrice.label}
+            </span>
+          </div>
+        )}
       </div>
       <ul
         style={{
