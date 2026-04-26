@@ -1,0 +1,18 @@
+# Backend completo - este deploy es frontend-only en Vercel.
+# Vercel autodetecta /api/*.ts como Serverless Functions; lo excluimos
+# porque el backend Hono no está adaptado a serverless (ver vercel.json).
+api/
+db/
+contracts/
+
+# Configs y artefactos solo del backend
+drizzle.config.ts
+tsconfig.server.json
+Dockerfile
+.dockerignore
+.backend-features.json
+
+# Tests y dev
+__tests__/
+*.test.ts
+vitest.config.ts
