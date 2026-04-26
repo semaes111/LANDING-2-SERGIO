@@ -24,6 +24,7 @@ import LogosBar from './sections/LogosBar'
 import TechShowcase from './sections/TechShowcase'
 import WhatsAppFloat from './components/WhatsAppFloat'
 import MobileStickyCTA from './components/MobileStickyCTA'
+import CookieBanner from './components/CookieBanner'
 import SmoothScroll from './components/effects/SmoothScroll'
 
 function App() {
@@ -92,6 +93,7 @@ function App() {
       </Routes>
       <WhatsAppFloat />
       <MobileStickyCTA />
+      <CookieBanner />
     </SmoothScroll>
   )
 }

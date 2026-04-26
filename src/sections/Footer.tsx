@@ -113,6 +113,32 @@ export default function Footer() {
             <FooterLink to="/aviso-legal">Aviso legal</FooterLink>
             <FooterLink to="/privacidad">Privacidad RGPD</FooterLink>
             <FooterLink to="/cookies">Cookies</FooterLink>
+            <li>
+              <button
+                type="button"
+                onClick={() => window.openCookieSettings?.()}
+                style={{
+                  background: 'none',
+                  border: 'none',
+                  padding: 0,
+                  margin: 0,
+                  fontSize: '13px',
+                  color: '#666666',
+                  cursor: 'pointer',
+                  fontFamily: 'inherit',
+                  textAlign: 'left',
+                  transition: 'color 0.2s ease',
+                }}
+                onMouseEnter={(e) => {
+                  ;(e.currentTarget as HTMLButtonElement).style.color = '#000000'
+                }}
+                onMouseLeave={(e) => {
+                  ;(e.currentTarget as HTMLButtonElement).style.color = '#666666'
+                }}
+              >
+                Configurar cookies
+              </button>
+            </li>
             <FooterLink to="/compliance-ai">Compliance AI Act</FooterLink>
             <FooterLink to="/">Política sanitaria</FooterLink>
           </ul>

@@ -1,11 +1,13 @@
 import { useEffect, useRef } from 'react'
 import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
+import { useCookieConsent } from '../components/CookieBanner'
 
 gsap.registerPlugin(ScrollTrigger)
 
 export default function LocationSection() {
   const sectionRef = useRef<HTMLElement>(null)
+  const mapsAllowed = useCookieConsent('maps')
 
   useEffect(() => {
     const section = sectionRef.current
@@ -54,16 +56,98 @@ export default function LocationSection() {
               border: '1px solid rgba(255,255,255,0.1)',
             }}
           >
-            <iframe
-              title="Centro NextHorizont Health"
-              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3202.0!2d-2.8142!3d36.7793!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMzbCsDQ2JzQ1LjUiTiAywrA0OCc1MS4xIlc!5e0!3m2!1ses!2ses!4v1"
-              width="100%"
-              height="100%"
-              style={{ border: 0, filter: 'grayscale(100%) invert(92%) contrast(83%)' }}
-              allowFullScreen
-              loading="lazy"
-              referrerPolicy="no-referrer-when-downgrade"
-            />
+            {mapsAllowed ? (
+              <iframe
+                title="Centro NextHorizont Health"
+                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3202.0!2d-2.8142!3d36.7793!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMzbCsDQ2JzQ1LjUiTiAywrA0OCc1MS4xIlc!5e0!3m2!1ses!2ses!4v1"
+                width="100%"
+                height="100%"
+                style={{ border: 0, filter: 'grayscale(100%) invert(92%) contrast(83%)' }}
+                allowFullScreen
+                loading="lazy"
+                referrerPolicy="no-referrer-when-downgrade"
+              />
+            ) : (
+              <div
+                style={{
+                  width: '100%',
+                  height: '100%',
+                  display: 'flex',
+                  flexDirection: 'column',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  gap: '16px',
+                  padding: '32px',
+                  textAlign: 'center',
+                }}
+              >
+                <p
+                  style={{
+                    fontSize: '11px',
+                    fontWeight: 500,
+                    letterSpacing: '0.24em',
+                    textTransform: 'uppercase',
+                    color: 'rgba(255,255,255,0.5)',
+                    margin: 0,
+                  }}
+                >
+                  Mapa desactivado
+                </p>
+                <p
+                  style={{
+                    fontSize: '14px',
+                    lineHeight: 1.6,
+                    color: 'rgba(255,255,255,0.72)',
+                    margin: 0,
+                    maxWidth: '320px',
+                  }}
+                >
+                  El mapa de Google requiere cookies de terceros. Acepta las cookies de Google
+                  Maps para ver la localización aquí, o ábrelo en Google Maps directamente.
+                </p>
+                <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap', justifyContent: 'center' }}>
+                  <button
+                    type="button"
+                    onClick={() => window.openCookieSettings?.()}
+                    style={{
+                      padding: '10px 18px',
+                      fontSize: '12px',
+                      fontWeight: 500,
+                      letterSpacing: '0.06em',
+                      textTransform: 'uppercase',
+                      color: '#0a0a0a',
+                      backgroundColor: '#ffffff',
+                      border: 'none',
+                      borderRadius: '8px',
+                      cursor: 'pointer',
+                      fontFamily: 'inherit',
+                    }}
+                  >
+                    Configurar cookies
+                  </button>
+                  <a
+                    href="https://www.google.com/maps/place/36%C2%B046'45.5%22N+2%C2%B048'51.1%22W"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    style={{
+                      padding: '10px 18px',
+                      fontSize: '12px',
+                      fontWeight: 500,
+                      letterSpacing: '0.06em',
+                      textTransform: 'uppercase',
+                      color: '#ffffff',
+                      backgroundColor: 'transparent',
+                      border: '1px solid rgba(255,255,255,0.32)',
+                      borderRadius: '8px',
+                      textDecoration: 'none',
+                      fontFamily: 'inherit',
+                    }}
+                  >
+                    Abrir en Maps ↗
+                  </a>
+                </div>
+              </div>
+            )}
           </div>
         </div>
 
