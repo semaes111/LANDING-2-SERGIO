@@ -1,16 +1,10 @@
 import { useEffect, useRef } from 'react'
 import gsap from 'gsap'
+import { Stethoscope, Syringe, BrainCog, GraduationCap, Activity, Video, Bot, Smartphone } from 'lucide-react'
+import { BentoGrid, BentoCard, BENTO_RESPONSIVE_CSS } from '../components/effects/BentoGrid'
 
-const services: { label: string; detail: string }[] = [
-  { label: 'Reset Metabólico', detail: 'Programa integral 90 días con GLP-1, nutrición y seguimiento médico continuo' },
-  { label: 'Consulta GLP-1', detail: 'Primera visita con evaluación de candidatura y prescripción individualizada' },
-  { label: 'Cursos de Nutrición', detail: 'Formación digital en nutrición clínica basada en evidencia científica actualizada' },
-  { label: 'Guías para Comer', detail: 'Recursos prácticos de reeducación alimentaria y hábitos metabólicos sostenibles' },
-  { label: 'Control de Peso', detail: 'Membership mensual con revisión médica, ajuste de dosis y app de seguimiento' },
-  { label: 'Formación Médica', detail: 'Programa para profesionales: casos clínicos, protocolos y certificación' },
-  { label: 'Telemedicina', detail: 'Consultas online, seguimiento remoto y prescripción digital desde cualquier lugar' },
-  { label: 'IA Clínica', detail: 'Pre-consulta inteligente, recordatorios de adherencia y dashboards de progreso' },
-]
+// Bento Grid layout — 4 columns × variable rows. Each card declares colSpan/rowSpan.
+// Asymmetric layout: hero card (Reset Metabólico 90D) takes 2x2, others fill around.
 
 export default function Capabilities() {
   const sectionRef = useRef<HTMLElement>(null)
@@ -118,86 +112,125 @@ export default function Capabilities() {
           </div>
         </div>
 
-        {/* Bullet grid */}
-        <ul
-          style={{
-            listStyle: 'none',
-            padding: 0,
-            margin: 0,
-            display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 320px), 1fr))',
-            gap: '2px',
-            backgroundColor: 'rgba(255,255,255,0.18)',
-            border: '1px solid rgba(255,255,255,0.18)',
-          }}
-        >
-          {services.map((service, i) => (
-            <BulletItem key={service.label} index={i} {...service} />
-          ))}
-        </ul>
+        {/* Bento Grid — asymmetric layout */}
+        <style>{BENTO_RESPONSIVE_CSS}</style>
+        <BentoGrid>
+          {/* Hero card: Reset Metabólico — 2x2 (the flagship product) */}
+          <BentoCard colSpan={2} rowSpan={2} index={0}>
+            <div style={{ display: 'flex', flexDirection: 'column', height: '100%', justifyContent: 'space-between', gap: '24px' }}>
+              <Syringe size={32} color="rgba(255,255,255,0.85)" strokeWidth={1.5} />
+              <div>
+                <h3 style={{ fontSize: 'clamp(22px, 2.4vw, 32px)', fontWeight: 400, color: '#ffffff', margin: 0, marginBottom: '12px', letterSpacing: '-0.02em', lineHeight: 1.15 }}>
+                  Reset Metabólico 90 días
+                </h3>
+                <p style={{ fontSize: '15px', lineHeight: 1.6, color: 'rgba(255,255,255,0.72)', margin: 0 }}>
+                  Programa integral con GLP-1 (Wegovy/Mounjaro), nutrición personalizada y seguimiento médico continuo. Diseñado para resultados sostenibles a 12+ meses.
+                </p>
+              </div>
+            </div>
+          </BentoCard>
+
+          {/* Consulta GLP-1 — 2x1 */}
+          <BentoCard colSpan={2} rowSpan={1} index={1}>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+              <Stethoscope size={28} color="rgba(255,255,255,0.85)" strokeWidth={1.5} />
+              <h3 style={{ fontSize: '20px', fontWeight: 400, color: '#ffffff', margin: 0, letterSpacing: '-0.01em' }}>
+                Consulta GLP-1
+              </h3>
+              <p style={{ fontSize: '14px', lineHeight: 1.5, color: 'rgba(255,255,255,0.7)', margin: 0 }}>
+                Primera visita con evaluación de candidatura y prescripción individualizada. Desde 99€.
+              </p>
+            </div>
+          </BentoCard>
+
+          {/* Telemedicina — 1x1 */}
+          <BentoCard colSpan={1} rowSpan={1} index={2}>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '10px', height: '100%' }}>
+              <Video size={26} color="rgba(255,255,255,0.85)" strokeWidth={1.5} />
+              <div style={{ marginTop: 'auto' }}>
+                <h3 style={{ fontSize: '17px', fontWeight: 400, color: '#ffffff', margin: 0, marginBottom: '6px' }}>
+                  Telemedicina
+                </h3>
+                <p style={{ fontSize: '13px', lineHeight: 1.45, color: 'rgba(255,255,255,0.65)', margin: 0 }}>
+                  Online o presencial.
+                </p>
+              </div>
+            </div>
+          </BentoCard>
+
+          {/* IA Clínica — 1x1 */}
+          <BentoCard colSpan={1} rowSpan={1} index={3}>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '10px', height: '100%' }}>
+              <Bot size={26} color="rgba(255,255,255,0.85)" strokeWidth={1.5} />
+              <div style={{ marginTop: 'auto' }}>
+                <h3 style={{ fontSize: '17px', fontWeight: 400, color: '#ffffff', margin: 0, marginBottom: '6px' }}>
+                  IA clínica
+                </h3>
+                <p style={{ fontSize: '13px', lineHeight: 1.45, color: 'rgba(255,255,255,0.65)', margin: 0 }}>
+                  Pre-consulta y dashboards.
+                </p>
+              </div>
+            </div>
+          </BentoCard>
+
+          {/* Membership Reset — 2x1 */}
+          <BentoCard colSpan={2} rowSpan={1} index={4}>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+              <Activity size={28} color="rgba(255,255,255,0.85)" strokeWidth={1.5} />
+              <h3 style={{ fontSize: '20px', fontWeight: 400, color: '#ffffff', margin: 0, letterSpacing: '-0.01em' }}>
+                Membership Reset
+              </h3>
+              <p style={{ fontSize: '14px', lineHeight: 1.5, color: 'rgba(255,255,255,0.7)', margin: 0 }}>
+                Revisión mensual, ajuste de dosis, app de seguimiento y WhatsApp directo. 79€/mes.
+              </p>
+            </div>
+          </BentoCard>
+
+          {/* Cursos de Nutrición — 2x1 */}
+          <BentoCard colSpan={2} rowSpan={1} index={5}>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+              <GraduationCap size={28} color="rgba(255,255,255,0.85)" strokeWidth={1.5} />
+              <h3 style={{ fontSize: '20px', fontWeight: 400, color: '#ffffff', margin: 0, letterSpacing: '-0.01em' }}>
+                Cursos de nutrición
+              </h3>
+              <p style={{ fontSize: '14px', lineHeight: 1.5, color: 'rgba(255,255,255,0.7)', margin: 0 }}>
+                Formación clínica basada en evidencia. Acceso al campus en cursos.nexthorizont.com.
+              </p>
+            </div>
+          </BentoCard>
+
+          {/* Formación Médica — 1x1 */}
+          <BentoCard colSpan={1} rowSpan={1} index={6}>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '10px', height: '100%' }}>
+              <BrainCog size={26} color="rgba(255,255,255,0.85)" strokeWidth={1.5} />
+              <div style={{ marginTop: 'auto' }}>
+                <h3 style={{ fontSize: '17px', fontWeight: 400, color: '#ffffff', margin: 0, marginBottom: '6px' }}>
+                  Formación
+                </h3>
+                <p style={{ fontSize: '13px', lineHeight: 1.45, color: 'rgba(255,255,255,0.65)', margin: 0 }}>
+                  Para profesionales.
+                </p>
+              </div>
+            </div>
+          </BentoCard>
+
+          {/* App móvil — 1x1 */}
+          <BentoCard colSpan={1} rowSpan={1} index={7}>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '10px', height: '100%' }}>
+              <Smartphone size={26} color="rgba(255,255,255,0.85)" strokeWidth={1.5} />
+              <div style={{ marginTop: 'auto' }}>
+                <h3 style={{ fontSize: '17px', fontWeight: 400, color: '#ffffff', margin: 0, marginBottom: '6px' }}>
+                  App móvil
+                </h3>
+                <p style={{ fontSize: '13px', lineHeight: 1.45, color: 'rgba(255,255,255,0.65)', margin: 0 }}>
+                  Próximamente.
+                </p>
+              </div>
+            </div>
+          </BentoCard>
+        </BentoGrid>
       </div>
     </section>
-  )
-}
-
-function BulletItem({
-  label,
-  detail,
-  index,
-}: {
-  label: string
-  detail: string
-  index: number
-}) {
-  return (
-    <li
-      style={{
-        backgroundColor: 'rgba(11,11,11,0.55)',
-        padding: '28px 32px',
-        display: 'flex',
-        gap: '20px',
-        alignItems: 'flex-start',
-        minHeight: '140px',
-      }}
-    >
-      <span
-        style={{
-          flex: '0 0 auto',
-          width: '28px',
-          fontSize: '11px',
-          letterSpacing: '0.14em',
-          color: 'rgba(255,255,255,0.55)',
-          fontVariantNumeric: 'tabular-nums',
-          paddingTop: '7px',
-        }}
-      >
-        {String(index + 1).padStart(2, '0')}
-      </span>
-      <div style={{ flex: '1 1 0%' }}>
-        <h3
-          style={{
-            fontSize: 'clamp(18px, 1.6vw, 24px)',
-            fontWeight: 500,
-            letterSpacing: '-0.01em',
-            lineHeight: 1.2,
-            color: '#ffffff',
-            marginBottom: '10px',
-          }}
-        >
-          {label}
-        </h3>
-        <p
-          style={{
-            fontSize: '14px',
-            lineHeight: 1.55,
-            color: 'rgba(255,255,255,0.72)',
-            margin: 0,
-          }}
-        >
-          {detail}
-        </p>
-      </div>
-    </li>
   )
 }
 
