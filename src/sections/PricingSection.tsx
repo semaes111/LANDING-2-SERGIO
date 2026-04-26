@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react'
 import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import WordsPullUp from '../components/effects/WordsPullUp'
+import TiltCard from '../components/effects/TiltCard'
 
 gsap.registerPlugin(ScrollTrigger)
 
@@ -138,7 +139,9 @@ export default function PricingSection() {
           }}
         >
           {plans.map((plan) => (
-            <PricingCard key={plan.name} plan={plan} />
+            <TiltCard key={plan.name} maxTilt={6} scaleOnHover={1.015}>
+              <PricingCard plan={plan} />
+            </TiltCard>
           ))}
         </div>
 

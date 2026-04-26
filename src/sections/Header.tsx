@@ -28,13 +28,29 @@ function getOAuthUrl() {
 export default function Header({ scrollRef, forceLight = false }: HeaderProps) {
   const [isCompact, setIsCompact] = useState(false)
   const [overHeroRaw, setOverHeroRaw] = useState(true)
+  const [hidden, setHidden] = useState(false)
   const rafRef = useRef<number>(0)
+  const lastYRef = useRef<number>(0)
 
   useEffect(() => {
     const check = () => {
       const y = scrollRef.current.y
       setIsCompact(y > 100)
       setOverHeroRaw(y < window.innerHeight * 0.85)
+
+      // Floating Navbar behavior: hide on scroll down (after threshold),
+      // show on scroll up. Threshold of 200px prevents hiding right at the top.
+      const lastY = lastYRef.current
+      const delta = y - lastY
+      if (Math.abs(delta) > 4) {
+        if (y > 200 && delta > 0) {
+          setHidden(true)
+        } else if (delta < 0) {
+          setHidden(false)
+        }
+        lastYRef.current = y
+      }
+
       rafRef.current = requestAnimationFrame(check)
     }
     rafRef.current = requestAnimationFrame(check)
@@ -70,8 +86,9 @@ export default function Header({ scrollRef, forceLight = false }: HeaderProps) {
         alignItems: 'center',
         justifyContent: 'space-between',
         padding: '0 clamp(20px, 4vw, 60px)',
+        transform: hidden ? 'translateY(-100%)' : 'translateY(0)',
         transition:
-          'height 0.4s cubic-bezier(0.16, 1, 0.3, 1), background-color 0.4s ease, border-color 0.4s ease',
+          'height 0.4s cubic-bezier(0.16, 1, 0.3, 1), background-color 0.4s ease, border-color 0.4s ease, transform 0.35s cubic-bezier(0.16, 1, 0.3, 1)',
       }}
     >
       <div
