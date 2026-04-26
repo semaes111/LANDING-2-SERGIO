@@ -21,6 +21,7 @@ import TechnologySection from './sections/TechnologySection'
 import BMICalculator from './sections/BMICalculator'
 import LocationSection from './sections/LocationSection'
 import LogosBar from './sections/LogosBar'
+import TechShowcase from './sections/TechShowcase'
 import WhatsAppFloat from './components/WhatsAppFloat'
 import SmoothScroll from './components/effects/SmoothScroll'
 
@@ -78,6 +79,7 @@ function App() {
                 <PricingSection />
                 <TechnologySection />
                 <Capabilities />
+                <TechShowcase />
                 <BMICalculator />
                 <Hero />
                 <LocationSection />
