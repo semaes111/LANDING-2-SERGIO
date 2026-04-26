@@ -1,6 +1,7 @@
 import { useEffect, useRef } from 'react'
 import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
+import NumberTicker from '../components/effects/NumberTicker'
 
 gsap.registerPlugin(ScrollTrigger)
 
@@ -167,6 +168,102 @@ export default function DoctorSection() {
               </li>
             ))}
           </ul>
+
+          <div
+            style={{
+              display: 'grid',
+              gridTemplateColumns: 'repeat(auto-fit, minmax(140px, 1fr))',
+              gap: '24px',
+              padding: '32px 0',
+              margin: '32px 0',
+              borderTop: '1px solid #e5e5e5',
+              borderBottom: '1px solid #e5e5e5',
+              maxWidth: '560px',
+            }}
+          >
+            <div style={{ textAlign: 'left' }}>
+              <NumberTicker
+                value={480}
+                style={{
+                  fontSize: 'clamp(36px, 4vw, 48px)',
+                  fontWeight: 400,
+                  letterSpacing: '-0.02em',
+                  lineHeight: 1,
+                  color: '#000000',
+                  display: 'block',
+                }}
+              />
+              <p
+                style={{
+                  fontSize: '11px',
+                  fontWeight: 500,
+                  letterSpacing: '0.12em',
+                  textTransform: 'uppercase',
+                  color: '#666666',
+                  marginTop: '8px',
+                  margin: '8px 0 0',
+                }}
+              >
+                Pacientes / mes
+              </p>
+            </div>
+
+            <div style={{ textAlign: 'left' }}>
+              <NumberTicker
+                value={50}
+                suffix="+"
+                style={{
+                  fontSize: 'clamp(36px, 4vw, 48px)',
+                  fontWeight: 400,
+                  letterSpacing: '-0.02em',
+                  lineHeight: 1,
+                  color: '#000000',
+                  display: 'block',
+                }}
+              />
+              <p
+                style={{
+                  fontSize: '11px',
+                  fontWeight: 500,
+                  letterSpacing: '0.12em',
+                  textTransform: 'uppercase',
+                  color: '#666666',
+                  marginTop: '8px',
+                  margin: '8px 0 0',
+                }}
+              >
+                Publicaciones indexadas
+              </p>
+            </div>
+
+            <div style={{ textAlign: 'left' }}>
+              <NumberTicker
+                value={15}
+                suffix="+"
+                style={{
+                  fontSize: 'clamp(36px, 4vw, 48px)',
+                  fontWeight: 400,
+                  letterSpacing: '-0.02em',
+                  lineHeight: 1,
+                  color: '#000000',
+                  display: 'block',
+                }}
+              />
+              <p
+                style={{
+                  fontSize: '11px',
+                  fontWeight: 500,
+                  letterSpacing: '0.12em',
+                  textTransform: 'uppercase',
+                  color: '#666666',
+                  marginTop: '8px',
+                  margin: '8px 0 0',
+                }}
+              >
+                Años de experiencia
+              </p>
+            </div>
+          </div>
 
           <blockquote
             className="doctor-animate"

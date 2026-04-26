@@ -22,6 +22,7 @@ import BMICalculator from './sections/BMICalculator'
 import LocationSection from './sections/LocationSection'
 import LogosBar from './sections/LogosBar'
 import WhatsAppFloat from './components/WhatsAppFloat'
+import SmoothScroll from './components/effects/SmoothScroll'
 
 function App() {
   const scrollRef = useRef({ y: 0, speed: 0 })
@@ -53,7 +54,7 @@ function App() {
   }
 
   return (
-    <>
+    <SmoothScroll>
       <Routes>
         <Route path="/login" element={<Login />} />
         <Route path="/aviso-legal" element={<AvisoLegal />} />
@@ -87,7 +88,7 @@ function App() {
         } />
       </Routes>
       <WhatsAppFloat />
-    </>
+    </SmoothScroll>
   )
 }
 
