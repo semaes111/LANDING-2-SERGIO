@@ -1,4 +1,5 @@
 import ContainerScroll from '../components/effects/ContainerScroll'
+import VideoQuoteOverlay from '../components/effects/VideoQuoteOverlay'
 
 /**
  * Tech Showcase section — uses Container Scroll to present the technology
@@ -93,10 +94,11 @@ export default function TechShowcase() {
             position: 'absolute',
             inset: 0,
             background:
-              'linear-gradient(180deg, rgba(0,0,0,0) 60%, rgba(0,0,0,0.3) 100%)',
+              'linear-gradient(180deg, rgba(0,0,0,0) 30%, rgba(0,0,0,0.45) 70%, rgba(0,0,0,0.7) 100%)',
             pointerEvents: 'none',
           }}
         />
+        <VideoQuoteOverlay />
       </div>
     </ContainerScroll>
   )
