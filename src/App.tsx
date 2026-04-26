@@ -21,6 +21,7 @@ import TechnologySection from './sections/TechnologySection'
 import BMICalculator from './sections/BMICalculator'
 import LocationSection from './sections/LocationSection'
 import LogosBar from './sections/LogosBar'
+import WhatsAppFloat from './components/WhatsAppFloat'
 
 function App() {
   const scrollRef = useRef({ y: 0, speed: 0 })
@@ -52,38 +53,41 @@ function App() {
   }
 
   return (
-    <Routes>
-      <Route path="/login" element={<Login />} />
-      <Route path="/aviso-legal" element={<AvisoLegal />} />
-      <Route path="/privacidad" element={<Privacidad />} />
-      <Route path="/cookies" element={<Cookies />} />
-      <Route path="/compliance-ai" element={<ComplianceAI />} />
-      <Route path="*" element={
-        <>
-          <Preloader />
-          <Header scrollRef={scrollRef} forceLight={currentRoomId !== null} />
-          {currentRoomId ? (
-            <RoomDetail roomId={currentRoomId} onBack={handleBack} />
-          ) : (
-            <main>
-              <Spatial />
-              <Philosophy />
-              <LogosBar />
-              <ProblemSection />
-              <Works scrollRef={scrollRef} onSelectRoom={handleSelectRoom} />
-              <DoctorSection />
-              <PricingSection />
-              <TechnologySection />
-              <Capabilities />
-              <BMICalculator />
-              <Hero />
-              <LocationSection />
-            </main>
-          )}
-          <Footer />
-        </>
-      } />
-    </Routes>
+    <>
+      <Routes>
+        <Route path="/login" element={<Login />} />
+        <Route path="/aviso-legal" element={<AvisoLegal />} />
+        <Route path="/privacidad" element={<Privacidad />} />
+        <Route path="/cookies" element={<Cookies />} />
+        <Route path="/compliance-ai" element={<ComplianceAI />} />
+        <Route path="*" element={
+          <>
+            <Preloader />
+            <Header scrollRef={scrollRef} forceLight={currentRoomId !== null} />
+            {currentRoomId ? (
+              <RoomDetail roomId={currentRoomId} onBack={handleBack} />
+            ) : (
+              <main>
+                <Spatial />
+                <Philosophy />
+                <LogosBar />
+                <ProblemSection />
+                <Works scrollRef={scrollRef} onSelectRoom={handleSelectRoom} />
+                <DoctorSection />
+                <PricingSection />
+                <TechnologySection />
+                <Capabilities />
+                <BMICalculator />
+                <Hero />
+                <LocationSection />
+              </main>
+            )}
+            <Footer />
+          </>
+        } />
+      </Routes>
+      <WhatsAppFloat />
+    </>
   )
 }
 
