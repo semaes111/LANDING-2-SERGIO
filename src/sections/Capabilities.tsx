@@ -2,6 +2,7 @@ import { useEffect, useRef } from 'react'
 import gsap from 'gsap'
 import { Stethoscope, Syringe, BrainCog, GraduationCap, Activity, Video, Bot, Smartphone } from 'lucide-react'
 import { BentoGrid, BentoCard, BENTO_RESPONSIVE_CSS } from '../components/effects/BentoGrid'
+import WeightLossChart from '../components/effects/WeightLossChart'
 
 // Bento Grid layout — 4 columns × variable rows. Each card declares colSpan/rowSpan.
 // Asymmetric layout: hero card (Reset Metabólico 90D) takes 2x2, others fill around.
@@ -117,7 +118,7 @@ export default function Capabilities() {
         <BentoGrid>
           {/* Hero card: Reset Metabólico — 2x2 (the flagship product) */}
           <BentoCard colSpan={2} rowSpan={2} index={0}>
-            <div style={{ display: 'flex', flexDirection: 'column', height: '100%', justifyContent: 'space-between', gap: '24px' }}>
+            <div style={{ display: 'flex', flexDirection: 'column', height: '100%', gap: '20px' }}>
               <Syringe size={32} color="rgba(255,255,255,0.85)" strokeWidth={1.5} />
               <div>
                 <h3 style={{ fontSize: 'clamp(22px, 2.4vw, 32px)', fontWeight: 400, color: '#ffffff', margin: 0, marginBottom: '12px', letterSpacing: '-0.02em', lineHeight: 1.15 }}>
@@ -125,6 +126,38 @@ export default function Capabilities() {
                 </h3>
                 <p style={{ fontSize: '15px', lineHeight: 1.6, color: 'rgba(255,255,255,0.72)', margin: 0 }}>
                   Programa integral con GLP-1 (Wegovy/Mounjaro), nutrición personalizada y seguimiento médico continuo. Diseñado para resultados sostenibles a 12+ meses.
+                </p>
+              </div>
+              <div
+                style={{
+                  marginTop: 'auto',
+                  paddingTop: '8px',
+                  borderTop: '1px solid rgba(255,255,255,0.08)',
+                }}
+              >
+                <p
+                  style={{
+                    fontSize: '10px',
+                    fontWeight: 500,
+                    letterSpacing: '0.16em',
+                    textTransform: 'uppercase',
+                    color: 'rgba(255,255,255,0.45)',
+                    margin: '0 0 4px',
+                  }}
+                >
+                  Pérdida prevista — 12 semanas
+                </p>
+                <WeightLossChart startWeight={100} totalLoss={12} />
+                <p
+                  style={{
+                    fontSize: '10px',
+                    color: 'rgba(255,255,255,0.45)',
+                    fontStyle: 'italic',
+                    margin: '4px 0 0',
+                    lineHeight: 1.3,
+                  }}
+                >
+                  Datos representativos basados en ensayos STEP-1/SURMOUNT-1. Resultados individuales varían.
                 </p>
               </div>
             </div>
