@@ -5,12 +5,14 @@ api/
 db/
 contracts/
 
-# Configs y artefactos solo del backend
-drizzle.config.ts
-tsconfig.server.json
+# Configs solo de backend (que no son referenciadas desde tsconfig.json root)
 Dockerfile
 .dockerignore
 .backend-features.json
+
+# IMPORTANTE: NO excluir tsconfig.server.json ni drizzle.config.ts.
+# tsconfig.json (root) los referencia via "references" y Vite los necesita
+# para resolver correctamente al procesar index.html.
 
 # Tests y dev
 __tests__/
