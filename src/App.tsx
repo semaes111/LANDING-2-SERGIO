@@ -14,6 +14,7 @@ import Privacidad from './pages/Privacidad'
 import Cookies from './pages/Cookies'
 import ComplianceAI from './pages/ComplianceAI'
 import QuienesSomos from './pages/QuienesSomos'
+import Empezar from './pages/Empezar'
 import ProblemSection from './sections/ProblemSection'
 import DoctorSection from './sections/DoctorSection'
 import PricingSection from './sections/PricingSection'
@@ -67,6 +68,13 @@ function App() {
           <>
             <Header scrollRef={scrollRef} forceLight />
             <QuienesSomos />
+            <Footer />
+          </>
+        } />
+        <Route path="/empezar" element={
+          <>
+            <Header scrollRef={scrollRef} forceLight />
+            <Empezar />
             <Footer />
           </>
         } />
