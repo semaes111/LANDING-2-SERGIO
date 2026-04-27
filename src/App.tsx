@@ -9,7 +9,6 @@ import Spatial from './sections/Spatial'
 import Footer from './sections/Footer'
 import Preloader from './sections/Preloader'
 import RoomDetail from './pages/RoomDetail'
-import Login from './pages/Login'
 import AvisoLegal from './pages/AvisoLegal'
 import Privacidad from './pages/Privacidad'
 import Cookies from './pages/Cookies'
@@ -60,7 +59,6 @@ function App() {
   return (
     <SmoothScroll>
       <Routes>
-        <Route path="/login" element={<Login />} />
         <Route path="/aviso-legal" element={<AvisoLegal />} />
         <Route path="/privacidad" element={<Privacidad />} />
         <Route path="/cookies" element={<Cookies />} />
