@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
+import { createPortal } from 'react-dom'
 import { useNavigate } from 'react-router'
 
 interface HeaderProps {
@@ -257,18 +258,26 @@ export default function Header({ scrollRef, forceLight = false }: HeaderProps) {
         </button>
       </nav>
 
-      {/* ============= Mobile fullscreen overlay ============= */}
-      {mobileOpen && (
-        <MobileOverlay
-          items={navItems}
-          onItemClick={handleNavItemClick}
-          onClose={() => setMobileOpen(false)}
-          onCtaClick={() => {
-            setMobileOpen(false)
-            navigate('/empezar')
-          }}
-        />
-      )}
+      {/* ============= Mobile drawer overlay =============
+          Rendered via Portal directly under document.body to escape any
+          stacking context or clipping created by this <header> (which has
+          position:fixed + transforms applied for show/hide animation).
+          Without the Portal the drawer's fixed-position inset was clipped
+          to the header's 88px height, leaving the menu items floating
+          transparent over the hero content with no background. */}
+      {mobileOpen &&
+        createPortal(
+          <MobileOverlay
+            items={navItems}
+            onItemClick={handleNavItemClick}
+            onClose={() => setMobileOpen(false)}
+            onCtaClick={() => {
+              setMobileOpen(false)
+              navigate('/empezar')
+            }}
+          />,
+          document.body,
+        )}
 
       {/* Responsive rules:
           - <900px: hide desktop anchor items, show hamburger
@@ -458,25 +467,38 @@ function CtaButton({
   )
 }
 
+
 // ====================================================================
-// MobileOverlay — Fullscreen menu on small screens
+// MobileOverlay — Right-side drawer with translucent backdrop
 // ====================================================================
 
 /**
- * Fullscreen overlay menu shown on screens <900px when the user taps the
- * hamburger button. Renders a list of nav items + the primary CTA in a
- * vertically-stacked layout that's easy to tap with a thumb.
+ * Drawer-style mobile menu rendered via React Portal under document.body.
+ *
+ * Visual structure:
+ *
+ *   ┌──────────────────────────────────────────────┐
+ *   │ Backdrop (semi-transparent, click-to-close)  │
+ *   │      ┌───────────────────────────────────┐   │
+ *   │      │ Drawer (340px / 86vw, full height)│   │
+ *   │      │  · close button                   │   │
+ *   │      │  · nav items (vertical stack)     │   │
+ *   │      │  · CTA Evaluación gratis          │   │
+ *   │      └───────────────────────────────────┘   │
+ *   └──────────────────────────────────────────────┘
  *
  * Implementation choices:
- *   - position: fixed + inset: 0 — covers entire viewport
- *   - z-index: 100 — above everything including the cookie banner (z:50)
- *     and the floating WhatsApp button (z:40)
- *   - Backdrop tap closes the overlay (forgiving UX)
- *   - Slide-in animation from right (200ms) — feels polished without
- *     blocking interaction
- *   - Pulse + halo animations on the CTA inside the overlay are intentionally
- *     dropped — overlay is already dark and inviting, more visual noise
- *     would dilute the focus on choosing a destination
+ *   - Backdrop and drawer are SEPARATE divs (not nested) so the backdrop's
+ *     opacity transition doesn't affect the drawer.
+ *   - Backdrop uses 'fixed inset:0' with semi-transparent black (rgba 0.55)
+ *     and a backdrop-filter blur(4px) for the iOS-style frosted look.
+ *   - Drawer uses 'fixed top:0 right:0 bottom:0' with a fixed width that
+ *     adapts to small screens via min(340px, 86vw).
+ *   - Both fade-in / slide-in via CSS keyframes (180ms, ease-out).
+ *   - z-index 100 for backdrop, 101 for drawer (drawer ABOVE backdrop).
+ *   - Portal target is document.body, NOT the header element. This is
+ *     critical: the header is position:fixed with transforms which create
+ *     a stacking context that would clip any 'fixed' descendant.
  */
 function MobileOverlay({
   items,
@@ -492,56 +514,66 @@ function MobileOverlay({
   return (
     <>
       <style>{`
-        @keyframes mobile-overlay-fade-in {
+        @keyframes mobile-drawer-backdrop-fade {
           from { opacity: 0; }
           to   { opacity: 1; }
         }
-        @keyframes mobile-overlay-slide-in {
-          from { transform: translateY(-12px); opacity: 0; }
-          to   { transform: translateY(0);     opacity: 1; }
+        @keyframes mobile-drawer-slide-in {
+          from { transform: translateX(100%); }
+          to   { transform: translateX(0); }
         }
       `}</style>
 
+      {/* Backdrop — click anywhere outside the drawer to close */}
       <div
-        id="mobile-nav-overlay"
-        role="dialog"
-        aria-modal="true"
-        aria-label="Menú de navegación"
         onClick={onClose}
+        aria-hidden="true"
         style={{
           position: 'fixed',
           inset: 0,
           zIndex: 100,
+          backgroundColor: 'rgba(0, 0, 0, 0.55)',
+          backdropFilter: 'blur(4px)',
+          WebkitBackdropFilter: 'blur(4px)',
+          animation: 'mobile-drawer-backdrop-fade 0.18s ease-out',
+          willChange: 'opacity',
+        }}
+      />
+
+      {/* Drawer panel — slides in from the right */}
+      <aside
+        id="mobile-nav-overlay"
+        role="dialog"
+        aria-modal="true"
+        aria-label="Menú de navegación"
+        style={{
+          position: 'fixed',
+          top: 0,
+          right: 0,
+          bottom: 0,
+          width: 'min(340px, 86vw)',
+          zIndex: 101,
           backgroundColor: '#0a0a0a',
           color: '#ffffff',
           display: 'flex',
           flexDirection: 'column',
-          padding: '24px 24px 40px',
-          animation: 'mobile-overlay-fade-in 0.2s ease-out',
-          willChange: 'opacity',
+          padding: '24px 24px 32px',
+          boxShadow: '-12px 0 40px rgba(0,0,0,0.5)',
+          animation: 'mobile-drawer-slide-in 0.22s ease-out',
+          willChange: 'transform',
+          overflowY: 'auto',
         }}
       >
-        {/* Top row: brand + close button */}
+        {/* Top row: close button (right-aligned, no brand label since the
+            drawer is narrow and the brand is already in the visible header
+            behind the backdrop) */}
         <div
-          onClick={(e) => e.stopPropagation()}
           style={{
             display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'space-between',
-            marginBottom: '48px',
+            justifyContent: 'flex-end',
+            marginBottom: '32px',
           }}
         >
-          <span
-            style={{
-              fontSize: '14px',
-              fontWeight: 500,
-              letterSpacing: '0.18em',
-              fontFamily: '"Helvetica Neue", sans-serif',
-              color: '#ffffff',
-            }}
-          >
-            NEXTHORIZONT
-          </span>
           <button
             onClick={onClose}
             aria-label="Cerrar menú"
@@ -565,18 +597,15 @@ function MobileOverlay({
           </button>
         </div>
 
-        {/* Nav items list — large tap targets, vertical stack */}
+        {/* Nav items — vertical stack with subtle dividers */}
         <nav
-          onClick={(e) => e.stopPropagation()}
           style={{
             display: 'flex',
             flexDirection: 'column',
-            gap: '4px',
             flex: 1,
-            animation: 'mobile-overlay-slide-in 0.25s ease-out 0.05s both',
           }}
         >
-          {items.map((item) => (
+          {items.map((item, idx) => (
             <button
               key={item.label}
               onClick={() => onItemClick(item)}
@@ -585,13 +614,14 @@ function MobileOverlay({
                 alignItems: 'center',
                 justifyContent: 'space-between',
                 gap: '16px',
-                padding: '20px 4px',
-                fontSize: '24px',
+                padding: '18px 4px',
+                fontSize: '20px',
                 fontWeight: 400,
                 letterSpacing: '-0.01em',
                 color: '#ffffff',
                 background: 'transparent',
                 border: 'none',
+                borderTop: idx === 0 ? '1px solid rgba(255,255,255,0.1)' : 'none',
                 borderBottom: '1px solid rgba(255,255,255,0.1)',
                 cursor: 'pointer',
                 textAlign: 'left',
@@ -600,23 +630,18 @@ function MobileOverlay({
               }}
             >
               <span>{item.label}</span>
-              <span aria-hidden="true" style={{ opacity: 0.4, fontSize: '20px' }}>→</span>
+              <span aria-hidden="true" style={{ opacity: 0.4, fontSize: '18px' }}>→</span>
             </button>
           ))}
         </nav>
 
-        {/* Bottom CTA — same Evaluación gratis but full-width inside the overlay */}
-        <div
-          onClick={(e) => e.stopPropagation()}
-          style={{
-            marginTop: '32px',
-          }}
-        >
+        {/* Bottom CTA — same Evaluación gratis with subtle blue glow */}
+        <div style={{ marginTop: '32px' }}>
           <button
             onClick={onCtaClick}
             style={{
               width: '100%',
-              padding: '20px 24px',
+              padding: '18px 24px',
               fontSize: '13px',
               fontWeight: 500,
               letterSpacing: '0.16em',
@@ -630,14 +655,14 @@ function MobileOverlay({
               alignItems: 'center',
               justifyContent: 'center',
               gap: '12px',
-              boxShadow: '0 0 18px 3px rgba(91,185,255,0.5)',
+              boxShadow: '0 0 16px 3px rgba(91,185,255,0.5)',
             }}
           >
             <span>Evaluación gratis</span>
             <span aria-hidden="true">→</span>
           </button>
         </div>
-      </div>
+      </aside>
     </>
   )
 }
