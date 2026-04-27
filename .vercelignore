@@ -1,13 +1,21 @@
 # Backend completo - este deploy es frontend-only en Vercel.
 # Vercel autodetecta /api/*.ts como Serverless Functions; excluimos
-# todo el backend Hono heredado (que no está adaptado a serverless),
-# pero PERMITIMOS las nuevas Vercel Edge Functions (api/registro.ts).
+# los archivos del backend Hono heredado (que no está adaptado a
+# serverless), pero PERMITIMOS las nuevas Vercel Edge Functions.
 #
-# Cómo funciona la sintaxis: las líneas que empiezan con "!" niegan
-# una exclusión anterior. Por eso primero excluimos todo api/ y luego
-# negamos los archivos concretos que SÍ queremos desplegar.
-api/
-!api/registro.ts
+# IMPORTANTE: gitignore NO permite re-incluir archivos cuando el
+# directorio padre está excluido por nombre. Por eso aquí enumeramos
+# archivos individuales del backend en lugar de excluir todo api/.
+api/auth-router.ts
+api/boot.ts
+api/consultation-router.ts
+api/context.ts
+api/middleware.ts
+api/reservation-router.ts
+api/router.ts
+api/lib/
+api/queries/
+api/kimi/
 
 db/
 contracts/
