@@ -317,7 +317,6 @@ export default function Hero() {
               fontSize: '12px',
               letterSpacing: '0.05em',
               color: 'rgba(255,255,255,0.5)',
-              marginTop: '32px',
               margin: 0,
               marginTop: '32px',
             }}

@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import { useNavigate } from 'react-router'
 
 /**
  * Mobile Sticky CTA — fixed bottom bar with a single high-conversion CTA.
@@ -11,15 +12,15 @@ import { useEffect, useState } from 'react'
  * - Black solid background — high contrast, no gradient (consistent with
  *   the medical/sober palette of the rest of the site)
  * - Respects safe-area-inset-bottom for iPhone notch / home indicator
- * - Click action: smooth-scrolls to #calculadora (BMI calculator section)
- *   which is the highest-converting funnel entry: free tool → lead capture
+ * - Click action: navigates to /empezar (rich registration page that
+ *   leads into the clinical questionnaire). Previously this CTA pointed
+ *   at #calculadora (BMI calculator) but after HITO 1 the entry point
+ *   for the new patient funnel is /empezar.
  *
  * Why this exists:
- * - Desktop has the Header with always-visible 'Sign In' button
- * - Mobile users 30+ scrolls deep have no quick way to convert
- * - Industry benchmark: sticky CTA on mobile increases conversion 40-60%
- *   on health/clinic landings (specifically when the CTA targets a free
- *   step like 'calculate your BMI' rather than 'pay 99€ now')
+ * - Desktop has the Header with always-visible 'Empezar evaluación' CTA
+ * - Mobile collapses the menu, so without this sticky bar a user 30+
+ *   scrolls deep would have no quick way to convert
  *
  * Coexistence with WhatsAppFloat:
  * - WhatsApp button is bottom-right corner (60×60)
@@ -28,12 +29,12 @@ import { useEffect, useState } from 'react'
  *   (see WhatsAppFloat.tsx — handles its own mobile offset)
  */
 
-const TARGET_SECTION_ID = 'calculadora'
 const SHOW_AFTER_SCROLL = 200
 
 export default function MobileStickyCTA() {
   const [visible, setVisible] = useState(false)
   const [isMobileViewport, setIsMobileViewport] = useState(false)
+  const navigate = useNavigate()
 
   useEffect(() => {
     // Check viewport size — only render on mobile
@@ -61,16 +62,13 @@ export default function MobileStickyCTA() {
 
   const handleClick = (e: React.MouseEvent) => {
     e.preventDefault()
-    const target = document.getElementById(TARGET_SECTION_ID)
-    if (target) {
-      target.scrollIntoView({ behavior: 'smooth', block: 'start' })
-    }
+    navigate('/empezar')
   }
 
   return (
     <div
       role="region"
-      aria-label="Reserva rápida"
+      aria-label="Empezar evaluación"
       style={{
         position: 'fixed',
         bottom: 0,
@@ -86,7 +84,7 @@ export default function MobileStickyCTA() {
       }}
     >
       <a
-        href={`#${TARGET_SECTION_ID}`}
+        href="/empezar"
         onClick={handleClick}
         style={{
           display: 'flex',
@@ -106,7 +104,7 @@ export default function MobileStickyCTA() {
           boxSizing: 'border-box',
         }}
       >
-        <span>Calcula tu IMC gratis</span>
+        <span>Empezar evaluación gratis</span>
         <span
           style={{
             display: 'inline-flex',
@@ -116,7 +114,7 @@ export default function MobileStickyCTA() {
             color: '#666666',
           }}
         >
-          <span>desde 99€</span>
+          <span>5 min</span>
           <span style={{ fontSize: '18px', color: '#000000' }}>→</span>
         </span>
       </a>
