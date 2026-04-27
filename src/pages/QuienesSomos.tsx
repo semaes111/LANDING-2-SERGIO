@@ -437,7 +437,7 @@ export default function QuienesSomos() {
                     margin: 0,
                   }}
                 >
-                  Cargos hospitalarios
+                  Cargos hospitalarios desempeñados
                 </p>
               </div>
               <ul
