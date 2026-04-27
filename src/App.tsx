@@ -14,6 +14,7 @@ import AvisoLegal from './pages/AvisoLegal'
 import Privacidad from './pages/Privacidad'
 import Cookies from './pages/Cookies'
 import ComplianceAI from './pages/ComplianceAI'
+import QuienesSomos from './pages/QuienesSomos'
 import ProblemSection from './sections/ProblemSection'
 import DoctorSection from './sections/DoctorSection'
 import PricingSection from './sections/PricingSection'
@@ -64,6 +65,13 @@ function App() {
         <Route path="/privacidad" element={<Privacidad />} />
         <Route path="/cookies" element={<Cookies />} />
         <Route path="/compliance-ai" element={<ComplianceAI />} />
+        <Route path="/quienes-somos" element={
+          <>
+            <Header scrollRef={scrollRef} forceLight />
+            <QuienesSomos />
+            <Footer />
+          </>
+        } />
         <Route path="*" element={
           <>
             <Preloader />

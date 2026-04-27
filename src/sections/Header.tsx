@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
-import { useAuth } from '@/hooks/useAuth'
+import { useNavigate } from 'react-router'
 
 interface HeaderProps {
   scrollRef: React.MutableRefObject<{ y: number; speed: number }>
@@ -8,22 +8,6 @@ interface HeaderProps {
 
 const navItems = ['Rooms', 'Experiences', 'Contact']
 const sectionIds = ['#works', '#capabilities', '#footer']
-
-function getOAuthUrl() {
-  const kimiAuthUrl = import.meta.env.VITE_KIMI_AUTH_URL
-  const appID = import.meta.env.VITE_APP_ID
-  const redirectUri = `${window.location.origin}/api/oauth/callback`
-  const state = btoa(redirectUri)
-
-  const url = new URL(`${kimiAuthUrl}/api/oauth/authorize`)
-  url.searchParams.set('client_id', appID)
-  url.searchParams.set('redirect_uri', redirectUri)
-  url.searchParams.set('response_type', 'code')
-  url.searchParams.set('scope', 'profile')
-  url.searchParams.set('state', state)
-
-  return url.toString()
-}
 
 export default function Header({ scrollRef, forceLight = false }: HeaderProps) {
   const [isCompact, setIsCompact] = useState(false)
@@ -58,9 +42,20 @@ export default function Header({ scrollRef, forceLight = false }: HeaderProps) {
   }, [scrollRef])
 
   const overHero = overHeroRaw && !forceLight
-  const { user, isAuthenticated, logout } = useAuth({ redirectPath: '/' })
+  const navigate = useNavigate()
 
   const handleNavClick = (index: number) => {
+    // If we're not on home, first navigate there (so the section IDs exist),
+    // then trigger scroll. If we're already on home, just smooth-scroll.
+    if (window.location.pathname !== '/') {
+      navigate('/')
+      // Wait one tick for home to mount, then scroll
+      setTimeout(() => {
+        const target = document.querySelector(sectionIds[index])
+        if (target) target.scrollIntoView({ behavior: 'smooth' })
+      }, 100)
+      return
+    }
     const target = document.querySelector(sectionIds[index])
     if (target) {
       target.scrollIntoView({ behavior: 'smooth' })
@@ -114,19 +109,11 @@ export default function Header({ scrollRef, forceLight = false }: HeaderProps) {
             onClick={() => handleNavClick(i)}
           />
         ))}
-        {isAuthenticated && user ? (
-          <NavItem
-            label="Sign Out"
-            overHero={overHero}
-            onClick={logout}
-          />
-        ) : (
-          <NavItem
-            label="Sign In"
-            overHero={overHero}
-            onClick={() => { window.location.href = getOAuthUrl() }}
-          />
-        )}
+        <NavItem
+          label="Sobre nosotros"
+          overHero={overHero}
+          onClick={() => navigate('/quienes-somos')}
+        />
       </nav>
     </header>
   )

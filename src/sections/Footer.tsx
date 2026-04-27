@@ -65,6 +65,7 @@ export default function Footer() {
             Clínica
           </p>
           <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: '10px' }}>
+            <FooterLink to="/quienes-somos">Sobre nosotros</FooterLink>
             <FooterLink to="/#equipo">Equipo</FooterLink>
             <FooterLink to="/#ubicacion">Centro NextHorizont Health</FooterLink>
             <FooterLink to="/#hero">Telemedicina</FooterLink>
