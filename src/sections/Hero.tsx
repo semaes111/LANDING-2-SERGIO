@@ -1,7 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
 import * as THREE from 'three'
-import { trpc } from '@/providers/trpc'
-import { useAuth } from '@/hooks/useAuth'
 
 const vertexShader = `
 varying vec2 vUv;
@@ -59,35 +57,13 @@ export default function Hero() {
   const [submitHovered, setSubmitHovered] = useState(false)
   const [submitted, setSubmitted] = useState(false)
   const [submitError, setSubmitError] = useState<string | null>(null)
+  const [submitting, setSubmitting] = useState(false)
   const [formData, setFormData] = useState({
     fullName: '',
     email: '',
     phone: '',
     consultationType: 'Primera consulta GLP-1',
     message: '',
-  })
-
-  const { user } = useAuth()
-
-  // Pre-fill name and email from authenticated user
-  useEffect(() => {
-    if (user) {
-      setFormData((prev) => ({
-        ...prev,
-        fullName: user.name || prev.fullName,
-        email: user.email || prev.email,
-      }))
-    }
-  }, [user])
-
-  const createConsultation = trpc.consultation.create.useMutation({
-    onSuccess: () => {
-      setSubmitted(true)
-      setSubmitError(null)
-    },
-    onError: (err) => {
-      setSubmitError(err.message || 'Algo salió mal. Inténtalo de nuevo.')
-    },
   })
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
@@ -159,14 +135,31 @@ export default function Hero() {
       return
     }
 
-    createConsultation.mutate({
-      fullName: formData.fullName,
-      email: formData.email,
-      phone: formData.phone || undefined,
-      consultationType: formData.consultationType,
-      message: formData.message || undefined,
-      userId: user?.id,
-    })
+    setSubmitting(true)
+
+    // Build a structured WhatsApp message with all the form data, so the
+    // medical team has everything in the first message and can respond
+    // efficiently. The user sees the message before sending — they can
+    // edit anything before pressing Send in WhatsApp.
+    const lines = [
+      'Hola, quisiera solicitar una consulta en Centro NextHorizont Health.',
+      '',
+      `• Nombre: ${formData.fullName}`,
+      `• Email: ${formData.email}`,
+    ]
+    if (formData.phone) lines.push(`• Teléfono: ${formData.phone}`)
+    lines.push(`• Tipo de consulta: ${formData.consultationType}`)
+    if (formData.message) {
+      lines.push('')
+      lines.push(`Mensaje: ${formData.message}`)
+    }
+
+    const text = encodeURIComponent(lines.join('\n'))
+    const url = `https://wa.me/34640056272?text=${text}`
+    window.open(url, '_blank', 'noopener,noreferrer')
+
+    setSubmitted(true)
+    setSubmitting(false)
   }
 
   return (
@@ -285,7 +278,17 @@ export default function Hero() {
                 color: 'rgba(255,255,255,0.85)',
               }}
             >
-              Gracias — nuestro equipo médico se pondrá en contacto contigo en las próximas 24 horas. Hemos enviado una confirmación a tu email.
+              Hemos abierto WhatsApp con tu solicitud pre-rellenada. Pulsa enviar y nuestro equipo médico te
+              responderá en breve. Si no se abrió WhatsApp,{' '}
+              <a
+                href="https://wa.me/34640056272"
+                target="_blank"
+                rel="noopener noreferrer"
+                style={{ color: '#ffffff', textDecoration: 'underline', textUnderlineOffset: '3px' }}
+              >
+                ábrelo manualmente aquí
+              </a>
+              .
             </div>
           ) : (
             <form
@@ -339,7 +342,7 @@ export default function Hero() {
               />
               <button
                 type="submit"
-                disabled={createConsultation.isPending}
+                disabled={submitting}
                 onMouseEnter={() => setSubmitHovered(true)}
                 onMouseLeave={() => setSubmitHovered(false)}
                 style={{
@@ -351,14 +354,14 @@ export default function Hero() {
                   color: submitHovered ? '#0b0b0b' : '#ffffff',
                   backgroundColor: submitHovered ? '#ffffff' : 'transparent',
                   border: '1px solid #ffffff',
-                  cursor: createConsultation.isPending ? 'wait' : 'pointer',
+                  cursor: submitting ? 'wait' : 'pointer',
                   textTransform: 'uppercase',
                   transition: 'all 0.25s ease',
                   fontFamily: '"Helvetica Neue", sans-serif',
-                  opacity: createConsultation.isPending ? 0.6 : 1,
+                  opacity: submitting ? 0.6 : 1,
                 }}
               >
-                {createConsultation.isPending ? 'Enviando...' : 'Solicitar consulta'}
+                {submitting ? 'Abriendo WhatsApp...' : 'Solicitar consulta por WhatsApp'}
               </button>
             </form>
           )}
