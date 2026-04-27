@@ -6,6 +6,7 @@
   "installCommand": "npm install",
   "rewrites": [
     { "source": "/api/registro", "destination": "/api/registro" },
+    { "source": "/api/informe", "destination": "/api/informe" },
     { "source": "/api/(.*)", "destination": "/api-disabled.html" },
     { "source": "/(.*)", "destination": "/index.html" }
   ],
