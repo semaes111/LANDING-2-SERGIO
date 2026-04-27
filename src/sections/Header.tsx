@@ -339,7 +339,7 @@ function CtaButton({
           willChange: 'box-shadow',
         }}
       >
-        <span>Empezar evaluación</span>
+        <span>Evaluación gratis</span>
         <span aria-hidden="true">→</span>
       </button>
     </span>

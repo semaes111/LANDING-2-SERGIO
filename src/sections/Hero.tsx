@@ -279,7 +279,7 @@ export default function Hero() {
                 gap: '12px',
               }}
             >
-              <span>Empezar evaluación gratis</span>
+              <span>Evaluación gratis</span>
               <span aria-hidden="true">→</span>
             </button>
 

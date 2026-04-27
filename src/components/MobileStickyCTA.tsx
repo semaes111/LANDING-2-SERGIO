@@ -68,7 +68,7 @@ export default function MobileStickyCTA() {
   return (
     <div
       role="region"
-      aria-label="Empezar evaluación"
+      aria-label="Empezar evaluación gratis"
       style={{
         position: 'fixed',
         bottom: 0,
@@ -104,7 +104,7 @@ export default function MobileStickyCTA() {
           boxSizing: 'border-box',
         }}
       >
-        <span>Empezar evaluación gratis</span>
+        <span>Evaluación gratis</span>
         <span
           style={{
             display: 'inline-flex',
