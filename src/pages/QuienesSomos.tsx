@@ -11,6 +11,7 @@ import {
   Award,
 } from 'lucide-react'
 import WordsPullUp from '../components/effects/WordsPullUp'
+import TextRevealOnScroll from '../components/effects/TextRevealOnScroll'
 import { BentoGrid, BentoCard, BENTO_RESPONSIVE_CSS } from '../components/effects/BentoGrid'
 import NumberTicker from '../components/effects/NumberTicker'
 
@@ -116,21 +117,37 @@ export default function QuienesSomos() {
     if (!root) return
 
     const ctx = gsap.context(() => {
-      gsap.from('.qs-fade-up', {
-        y: 32,
-        opacity: 0,
-        duration: 0.9,
-        stagger: 0.08,
-        ease: 'power3.out',
-        scrollTrigger: {
-          trigger: '.qs-fade-up',
-          start: 'top 85%',
-          once: true,
-        },
+      // Each .qs-fade-up gets its OWN ScrollTrigger so animations fire as
+      // each element enters viewport, not all at once. Using toArray + per-
+      // element trigger is the canonical GSAP pattern for stagger-on-scroll
+      // across long pages (the previous single-trigger approach animated
+      // everything together as soon as the first element entered viewport,
+      // making elements below the fold appear pre-animated).
+      const elements = gsap.utils.toArray<HTMLElement>('.qs-fade-up')
+      elements.forEach((el) => {
+        gsap.from(el, {
+          y: 32,
+          opacity: 0,
+          duration: 0.9,
+          ease: 'power3.out',
+          scrollTrigger: {
+            trigger: el,
+            start: 'top 88%',
+            once: true,
+          },
+        })
       })
     }, root)
 
-    return () => ctx.revert()
+    // Force a refresh so triggers register against the current Lenis-driven
+    // scroll position. Without this, triggers created right after a route
+    // change can be evaluated against stale layout measurements.
+    const refreshTimer = window.setTimeout(() => ScrollTrigger.refresh(), 50)
+
+    return () => {
+      window.clearTimeout(refreshTimer)
+      ctx.revert()
+    }
   }, [])
 
   return (
@@ -171,19 +188,16 @@ export default function QuienesSomos() {
               marginBlockEnd: '28px',
             }}
           />
-          <p
+          <TextRevealOnScroll
+            text="Una clínica fundada por especialistas en medicina crítica que, desde 2017, integran farmacología avanzada, nutrición personalizada y tecnología de IA para tratar la obesidad como lo que es: una enfermedad metabólica seria. En El Ejido, Almería."
             style={{
               fontSize: 'clamp(16px, 1.5vw, 20px)',
               lineHeight: 1.55,
-              color: 'rgba(255,255,255,0.75)',
+              color: 'rgba(255,255,255,0.92)',
               maxWidth: '720px',
               margin: 0,
             }}
-          >
-            Una clínica fundada por especialistas en medicina crítica que, desde 2017, integran farmacología
-            avanzada, nutrición personalizada y tecnología de IA para tratar la obesidad como lo que es: una
-            enfermedad metabólica seria. En El Ejido, Almería.
-          </p>
+          />
         </div>
       </section>
 
