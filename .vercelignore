@@ -1,7 +1,14 @@
 # Backend completo - este deploy es frontend-only en Vercel.
-# Vercel autodetecta /api/*.ts como Serverless Functions; lo excluimos
-# porque el backend Hono no está adaptado a serverless (ver vercel.json).
+# Vercel autodetecta /api/*.ts como Serverless Functions; excluimos
+# todo el backend Hono heredado (que no está adaptado a serverless),
+# pero PERMITIMOS las nuevas Vercel Edge Functions (api/registro.ts).
+#
+# Cómo funciona la sintaxis: las líneas que empiezan con "!" niegan
+# una exclusión anterior. Por eso primero excluimos todo api/ y luego
+# negamos los archivos concretos que SÍ queremos desplegar.
 api/
+!api/registro.ts
+
 db/
 contracts/
 
