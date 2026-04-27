@@ -17,6 +17,9 @@
  * - Token must be exactly 64 hex chars. Anything else returns 400.
  * - Revoked or expired reports return 410 Gone.
  * - Non-existent token returns 404.
+ * - Soft-deleted reports (HITO 4.I cron) return 404 transparently
+ *   because the function reads from `nm_informes_paciente_active` view
+ *   instead of the underlying table.
  * - Cache-Control: no-store always.
  *
  * Runtime: Edge (Web standard APIs only, no Node.js).
@@ -73,8 +76,12 @@ async function fetchInforme(
   serviceKey: string,
   token: string,
 ): Promise<InformeRow | null> {
+  // HITO 4.I: read from the active view, which transparently excludes
+  // soft-deleted rows (deleted_at IS NOT NULL). When the cleanup cron marks
+  // an informe as soft-deleted, this query returns 0 rows and the caller
+  // gets a 404, which is semantically correct ("informe no longer available").
   const res = await fetch(
-    `${SUPABASE_URL}/rest/v1/nm_informes_paciente?token_acceso=eq.${encodeURIComponent(token)}&select=*&limit=1`,
+    `${SUPABASE_URL}/rest/v1/nm_informes_paciente_active?token_acceso=eq.${encodeURIComponent(token)}&select=*&limit=1`,
     {
       headers: {
         apikey: serviceKey,
