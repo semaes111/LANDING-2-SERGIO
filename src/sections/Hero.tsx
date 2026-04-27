@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 import * as THREE from 'three'
+import { useNavigate } from 'react-router'
 
 const vertexShader = `
 varying vec2 vUv;
@@ -54,20 +55,26 @@ export default function Hero() {
     time: new THREE.Uniform(0),
   })
 
-  const [submitHovered, setSubmitHovered] = useState(false)
-  const [submitted, setSubmitted] = useState(false)
-  const [submitError, setSubmitError] = useState<string | null>(null)
-  const [submitting, setSubmitting] = useState(false)
-  const [formData, setFormData] = useState({
-    fullName: '',
-    email: '',
-    phone: '',
-    consultationType: 'Primera consulta GLP-1',
-    message: '',
-  })
+  // Hover states for the two CTAs (primary registration, secondary WhatsApp).
+  const [primaryHovered, setPrimaryHovered] = useState(false)
+  const [secondaryHovered, setSecondaryHovered] = useState(false)
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
-    setFormData((prev) => ({ ...prev, [e.target.name]: e.target.value }))
+  const navigate = useNavigate()
+
+  /**
+   * Build the prefilled WhatsApp message for the secondary CTA.
+   * The previous Hero collected name/email/phone/consultationType/message
+   * via a 5-field form. After moving the registration funnel to /empezar
+   * (which captures only name + phone for an Edge Function), the WhatsApp
+   * fallback no longer has form data to serialize. The message is now a
+   * plain greeting — the patient writes their question in WhatsApp itself.
+   */
+  const handleWhatsAppClick = () => {
+    const text = encodeURIComponent(
+      'Hola, me interesa Centro NextHorizont Health y querría preguntar por una consulta.',
+    )
+    const url = `https://wa.me/34640056272?text=${text}`
+    window.open(url, '_blank', 'noopener,noreferrer')
   }
 
   useEffect(() => {
@@ -125,42 +132,6 @@ export default function Hero() {
       material.dispose()
     }
   }, [])
-
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault()
-    setSubmitError(null)
-
-    if (!formData.fullName || !formData.email) {
-      setSubmitError('Por favor completa los campos obligatorios.')
-      return
-    }
-
-    setSubmitting(true)
-
-    // Build a structured WhatsApp message with all the form data, so the
-    // medical team has everything in the first message and can respond
-    // efficiently. The user sees the message before sending — they can
-    // edit anything before pressing Send in WhatsApp.
-    const lines = [
-      'Hola, quisiera solicitar una consulta en Centro NextHorizont Health.',
-      '',
-      `• Nombre: ${formData.fullName}`,
-      `• Email: ${formData.email}`,
-    ]
-    if (formData.phone) lines.push(`• Teléfono: ${formData.phone}`)
-    lines.push(`• Tipo de consulta: ${formData.consultationType}`)
-    if (formData.message) {
-      lines.push('')
-      lines.push(`Mensaje: ${formData.message}`)
-    }
-
-    const text = encodeURIComponent(lines.join('\n'))
-    const url = `https://wa.me/34640056272?text=${text}`
-    window.open(url, '_blank', 'noopener,noreferrer')
-
-    setSubmitted(true)
-    setSubmitting(false)
-  }
 
   return (
     <section
@@ -233,7 +204,7 @@ export default function Hero() {
         </div>
       </div>
 
-      {/* Right: form */}
+      {/* Right: dual CTA (primary registration + secondary WhatsApp) */}
       <div
         style={{
           backgroundColor: '#0b0b0b',
@@ -254,7 +225,7 @@ export default function Hero() {
               marginBottom: '14px',
             }}
           >
-            Contacto
+            Primera evaluación · Sin coste
           </p>
           <h3
             style={{
@@ -262,248 +233,99 @@ export default function Hero() {
               fontWeight: 400,
               letterSpacing: '-0.02em',
               lineHeight: 1.15,
-              marginBottom: '36px',
+              marginBottom: '20px',
+              margin: 0,
             }}
           >
             Solicita tu consulta médica
           </h3>
+          <p
+            style={{
+              fontSize: '16px',
+              lineHeight: 1.55,
+              color: 'rgba(255,255,255,0.78)',
+              margin: 0,
+              marginTop: '20px',
+              marginBottom: '40px',
+              maxWidth: '460px',
+            }}
+          >
+            Te ayudamos a entender tu situación con un cuestionario clínico de 5 minutos.
+            Después agendamos tu consulta.
+          </p>
 
-          {submitted ? (
-            <div
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
+            {/* Primary CTA: navigates to /empezar */}
+            <button
+              type="button"
+              onClick={() => navigate('/empezar')}
+              onMouseEnter={() => setPrimaryHovered(true)}
+              onMouseLeave={() => setPrimaryHovered(false)}
               style={{
+                padding: '20px 28px',
+                fontSize: '13px',
+                fontWeight: 500,
+                letterSpacing: '0.16em',
+                color: primaryHovered ? '#ffffff' : '#0b0b0b',
+                backgroundColor: primaryHovered ? 'transparent' : '#ffffff',
+                border: '1px solid #ffffff',
+                cursor: 'pointer',
+                textTransform: 'uppercase',
+                transition: 'all 0.25s ease',
+                fontFamily: '"Helvetica Neue", sans-serif',
+                display: 'inline-flex',
+                alignItems: 'center',
+                justifyContent: 'space-between',
+                gap: '12px',
+              }}
+            >
+              <span>Empezar evaluación gratis</span>
+              <span aria-hidden="true">→</span>
+            </button>
+
+            {/* Secondary CTA: opens WhatsApp directly */}
+            <button
+              type="button"
+              onClick={handleWhatsAppClick}
+              onMouseEnter={() => setSecondaryHovered(true)}
+              onMouseLeave={() => setSecondaryHovered(false)}
+              style={{
+                padding: '20px 28px',
+                fontSize: '13px',
+                fontWeight: 500,
+                letterSpacing: '0.16em',
+                color: secondaryHovered ? '#0b0b0b' : 'rgba(255,255,255,0.85)',
+                backgroundColor: secondaryHovered ? '#ffffff' : 'transparent',
                 border: '1px solid rgba(255,255,255,0.4)',
-                padding: '32px 28px',
-                fontSize: '15px',
-                lineHeight: 1.6,
-                color: 'rgba(255,255,255,0.85)',
+                cursor: 'pointer',
+                textTransform: 'uppercase',
+                transition: 'all 0.25s ease',
+                fontFamily: '"Helvetica Neue", sans-serif',
+                display: 'inline-flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                gap: '12px',
               }}
             >
-              Hemos abierto WhatsApp con tu solicitud pre-rellenada. Pulsa enviar y nuestro equipo médico te
-              responderá en breve. Si no se abrió WhatsApp,{' '}
-              <a
-                href="https://wa.me/34640056272"
-                target="_blank"
-                rel="noopener noreferrer"
-                style={{ color: '#ffffff', textDecoration: 'underline', textUnderlineOffset: '3px' }}
-              >
-                ábrelo manualmente aquí
-              </a>
-              .
-            </div>
-          ) : (
-            <form
-              onSubmit={handleSubmit}
-              style={{
-                display: 'flex',
-                flexDirection: 'column',
-                gap: '20px',
-              }}
-            >
-              {submitError && (
-                <div
-                  style={{
-                    border: '1px solid rgba(255,100,100,0.5)',
-                    padding: '14px 18px',
-                    fontSize: '13px',
-                    lineHeight: 1.5,
-                    color: 'rgba(255,150,150,0.9)',
-                    marginBottom: '4px',
-                  }}
-                >
-                  {submitError}
-                </div>
-              )}
-              <Field label="Nombre completo" type="text" name="fullName" placeholder="María García" value={formData.fullName} onChange={handleChange} />
-              <Row>
-                <Field label="Email" type="email" name="email" placeholder="maria@email.com" value={formData.email} onChange={handleChange} />
-                <Field label="Teléfono" type="tel" name="phone" placeholder="+34 600 000 000" value={formData.phone} onChange={handleChange} />
-              </Row>
-              <SelectField
-                label="Tipo de consulta"
-                name="consultationType"
-                value={formData.consultationType}
-                onChange={handleChange}
-                options={[
-                  'Primera consulta GLP-1',
-                  'Reset Metabólico 90 días',
-                  'Curso de Nutrición',
-                  'Guía para aprender a comer',
-                  'Control de peso mensual',
-                  'Programa para profesionales',
-                  'Otra consulta',
-                ]}
-              />
-              <TextareaField
-                label="Mensaje (opcional)"
-                name="message"
-                placeholder="Cuéntanos brevemente tu situación o cualquier duda..."
-                value={formData.message}
-                onChange={handleChange}
-              />
-              <button
-                type="submit"
-                disabled={submitting}
-                onMouseEnter={() => setSubmitHovered(true)}
-                onMouseLeave={() => setSubmitHovered(false)}
-                style={{
-                  marginTop: '12px',
-                  padding: '18px 24px',
-                  fontSize: '13px',
-                  fontWeight: 500,
-                  letterSpacing: '0.16em',
-                  color: submitHovered ? '#0b0b0b' : '#ffffff',
-                  backgroundColor: submitHovered ? '#ffffff' : 'transparent',
-                  border: '1px solid #ffffff',
-                  cursor: submitting ? 'wait' : 'pointer',
-                  textTransform: 'uppercase',
-                  transition: 'all 0.25s ease',
-                  fontFamily: '"Helvetica Neue", sans-serif',
-                  opacity: submitting ? 0.6 : 1,
-                }}
-              >
-                {submitting ? 'Abriendo WhatsApp...' : 'Solicitar consulta por WhatsApp'}
-              </button>
-            </form>
-          )}
+              <span>Prefiero WhatsApp directo</span>
+            </button>
+          </div>
+
+          {/* Reassurance row */}
+          <p
+            style={{
+              fontSize: '12px',
+              letterSpacing: '0.05em',
+              color: 'rgba(255,255,255,0.5)',
+              marginTop: '32px',
+              margin: 0,
+              marginTop: '32px',
+            }}
+          >
+            5 minutos · Tus datos cifrados · Sin compromiso
+          </p>
         </div>
       </div>
     </section>
-  )
-}
-
-function Row({ children }: { children: React.ReactNode }) {
-  return (
-    <div
-      style={{
-        display: 'grid',
-        gridTemplateColumns: '1fr 1fr',
-        gap: '20px',
-      }}
-    >
-      {children}
-    </div>
-  )
-}
-
-const fieldBase: React.CSSProperties = {
-  width: '100%',
-  padding: '12px 0',
-  fontSize: '15px',
-  backgroundColor: 'transparent',
-  color: '#ffffff',
-  border: 'none',
-  borderBottom: '1px solid rgba(255,255,255,0.35)',
-  outline: 'none',
-  fontFamily: 'inherit',
-  letterSpacing: '0.01em',
-  appearance: 'none',
-  colorScheme: 'dark',
-}
-
-const labelBase: React.CSSProperties = {
-  fontSize: '11px',
-  letterSpacing: '0.2em',
-  color: 'rgba(255,255,255,0.6)',
-  textTransform: 'uppercase',
-  marginBottom: '4px',
-  display: 'block',
-}
-
-function Field({
-  label,
-  type,
-  name,
-  placeholder,
-  min,
-  value,
-  onChange,
-}: {
-  label: string
-  type: string
-  name: string
-  placeholder?: string
-  min?: number
-  value?: string
-  onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void
-}) {
-  return (
-    <label style={{ display: 'block' }}>
-      <span style={labelBase}>{label}</span>
-      <input
-        type={type}
-        name={name}
-        placeholder={placeholder}
-        min={min}
-        value={value}
-        onChange={onChange}
-        style={fieldBase}
-        onFocus={(e) => (e.currentTarget.style.borderBottomColor = '#ffffff')}
-        onBlur={(e) => (e.currentTarget.style.borderBottomColor = 'rgba(255,255,255,0.35)')}
-      />
-    </label>
-  )
-}
-
-function SelectField({
-  label,
-  name,
-  options,
-  value,
-  onChange,
-}: {
-  label: string
-  name: string
-  options: string[]
-  value?: string
-  onChange?: (e: React.ChangeEvent<HTMLSelectElement>) => void
-}) {
-  return (
-    <label style={{ display: 'block' }}>
-      <span style={labelBase}>{label}</span>
-      <select
-        name={name}
-        value={value}
-        onChange={onChange}
-        style={{ ...fieldBase, paddingRight: '20px' }}
-        onFocus={(e) => (e.currentTarget.style.borderBottomColor = '#ffffff')}
-        onBlur={(e) => (e.currentTarget.style.borderBottomColor = 'rgba(255,255,255,0.35)')}
-      >
-        {options.map((opt) => (
-          <option key={opt} value={opt} style={{ color: '#000', backgroundColor: '#fff' }}>
-            {opt}
-          </option>
-        ))}
-      </select>
-    </label>
-  )
-}
-
-function TextareaField({
-  label,
-  name,
-  placeholder,
-  value,
-  onChange,
-}: {
-  label: string
-  name: string
-  placeholder?: string
-  value?: string
-  onChange?: (e: React.ChangeEvent<HTMLTextAreaElement>) => void
-}) {
-  return (
-    <label style={{ display: 'block' }}>
-      <span style={labelBase}>{label}</span>
-      <textarea
-        name={name}
-        placeholder={placeholder}
-        rows={3}
-        value={value}
-        onChange={onChange}
-        style={{ ...fieldBase, resize: 'vertical', paddingTop: '12px' }}
-        onFocus={(e) => (e.currentTarget.style.borderBottomColor = '#ffffff')}
-        onBlur={(e) => (e.currentTarget.style.borderBottomColor = 'rgba(255,255,255,0.35)')}
-      />
-    </label>
   )
 }
