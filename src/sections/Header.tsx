@@ -225,6 +225,7 @@ function CtaButton({
   onClick: () => void
 }) {
   const [hovered, setHovered] = useState(false)
+  const [pressed, setPressed] = useState(false)
 
   // Filled solid color contrasted with the header background.
   // Over hero (transparent header) -> filled white CTA with black text.
@@ -236,35 +237,111 @@ function CtaButton({
   const hoverFg = overHero ? '#ffffff' : '#000000'
   const hoverBorder = overHero ? '#ffffff' : '#000000'
 
+  // Brand "medical sky" blue for the pulse + halo.
+  // Chosen to harmonize with:
+  //   - The Hero's procedural shader, whose dominant tone is cyan-blue
+  //     (cos(len-0.05)*0.45+0.55 emits ~rgb(140,200,225))
+  //   - The Spatial section's blue molecule visualization
+  // Saturation is moderate (not electric blue) to feel "clinical light"
+  // rather than "marketing accent".
+  const pulseBlue = '#5BB9FF'
+  // Pulse ring is slightly more transparent for a softer expanding wave.
+  // The halo (box-shadow on the button) is denser to give the feeling that
+  // the button itself is glowing.
+  const haloIntensity = hovered ? 0.65 : 0.45
+  const pulseAnimation = pressed ? 'none' : 'cta-pulse-ring 2.4s ease-out infinite'
+
   return (
-    <button
-      onMouseEnter={() => setHovered(true)}
-      onMouseLeave={() => setHovered(false)}
-      onClick={onClick}
+    <span
       style={{
+        position: 'relative',
         display: 'inline-flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        gap: '8px',
         marginLeft: '12px',
-        padding: '10px 20px',
-        alignSelf: 'center',
-        fontSize: '12px',
-        fontWeight: 500,
-        letterSpacing: '0.14em',
-        backgroundColor: hovered ? 'transparent' : filledBg,
-        color: hovered ? hoverFg : filledFg,
-        border: `1px solid ${hovered ? hoverBorder : filledBg}`,
-        cursor: 'pointer',
-        transition:
-          'background-color 0.25s ease, color 0.25s ease, border-color 0.25s ease',
-        whiteSpace: 'nowrap',
-        fontFamily: '"Helvetica Neue", sans-serif',
-        textTransform: 'uppercase',
+        alignItems: 'center',
       }}
     >
-      <span>Empezar evaluación</span>
-      <span aria-hidden="true">→</span>
-    </button>
+      {/* Inject keyframes once. Multiple instances of <style> with same content
+          are deduplicated by the browser, so this is safe to render in each
+          CtaButton render. We do this here (rather than a global stylesheet)
+          to keep the animation co-located with the only consumer. */}
+      <style>{`
+        @keyframes cta-pulse-ring {
+          0%   { transform: scale(1);   opacity: 0.7; }
+          75%  { transform: scale(1.6); opacity: 0;   }
+          100% { transform: scale(1.6); opacity: 0;   }
+        }
+        @keyframes cta-halo-breathe {
+          0%, 100% { box-shadow: 0 0 0 0 rgba(91,185,255,0.0), 0 0 14px 2px rgba(91,185,255,0.45); }
+          50%      { box-shadow: 0 0 0 0 rgba(91,185,255,0.0), 0 0 22px 5px rgba(91,185,255,0.65); }
+        }
+        @keyframes cta-halo-breathe-strong {
+          0%, 100% { box-shadow: 0 0 0 0 rgba(91,185,255,0.0), 0 0 22px 5px rgba(91,185,255,0.65); }
+          50%      { box-shadow: 0 0 0 0 rgba(91,185,255,0.0), 0 0 32px 9px rgba(91,185,255,0.85); }
+        }
+        @media (prefers-reduced-motion: reduce) {
+          .cta-pulse-ring,
+          .cta-halo-button { animation: none !important; box-shadow: 0 0 14px 2px rgba(91,185,255,0.45) !important; }
+        }
+      `}</style>
+
+      {/* Expanding pulse ring — pure CSS, position: absolute, behind the button */}
+      <span
+        className="cta-pulse-ring"
+        aria-hidden="true"
+        style={{
+          position: 'absolute',
+          inset: 0,
+          borderRadius: '4px',
+          border: `1.5px solid ${pulseBlue}`,
+          pointerEvents: 'none',
+          opacity: 0,
+          animation: pulseAnimation,
+          transformOrigin: 'center',
+          willChange: 'transform, opacity',
+        }}
+      />
+
+      <button
+        className="cta-halo-button"
+        onMouseEnter={() => setHovered(true)}
+        onMouseLeave={() => setHovered(false)}
+        onMouseDown={() => setPressed(true)}
+        onMouseUp={() => setPressed(false)}
+        onClick={onClick}
+        style={{
+          position: 'relative',
+          display: 'inline-flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          gap: '8px',
+          padding: '10px 20px',
+          alignSelf: 'center',
+          fontSize: '12px',
+          fontWeight: 500,
+          letterSpacing: '0.14em',
+          backgroundColor: hovered ? 'transparent' : filledBg,
+          color: hovered ? hoverFg : filledFg,
+          border: `1px solid ${hovered ? hoverBorder : filledBg}`,
+          cursor: 'pointer',
+          transition:
+            'background-color 0.25s ease, color 0.25s ease, border-color 0.25s ease',
+          whiteSpace: 'nowrap',
+          fontFamily: '"Helvetica Neue", sans-serif',
+          textTransform: 'uppercase',
+          // Halo: animated box-shadow breathing in the brand blue.
+          // We use the exported keyframe both for idle and hover (different
+          // intensity range), so the transition is smooth.
+          animation: hovered
+            ? 'cta-halo-breathe-strong 2.4s ease-in-out infinite'
+            : 'cta-halo-breathe 2.4s ease-in-out infinite',
+          // Inline fallback for the very first frame before keyframes kick in
+          boxShadow: `0 0 14px 2px rgba(91,185,255,${haloIntensity})`,
+          willChange: 'box-shadow',
+        }}
+      >
+        <span>Empezar evaluación</span>
+        <span aria-hidden="true">→</span>
+      </button>
+    </span>
   )
 }
