@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow">
+<title>Centro · NextHorizont — En adaptación</title>
+<style>
+  :root{
+    --ink:#0f1c2e;
+    --paper:#f4f1ea;
+    --accent:#1d4ed8;
+    --accent-soft:#dde6fb;
+    --muted:#5a6b7a;
+    --line:#c9c2b4;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  html,body{height:100%}
+  body{
+    font-family:Georgia,'Times New Roman',serif;
+    background:var(--paper);
+    color:var(--ink);
+    display:flex;align-items:center;justify-content:center;
+    min-height:100vh;padding:2rem;
+    background-image:
+      radial-gradient(circle at 12% 18%, rgba(29,78,216,.06) 0, transparent 40%),
+      radial-gradient(circle at 88% 82%, rgba(15,28,46,.05) 0, transparent 40%);
+  }
+  .card{
+    max-width:640px;width:100%;
+    background:#fff;
+    border:1px solid var(--line);
+    border-radius:2px;
+    box-shadow:0 24px 60px -30px rgba(15,28,46,.45);
+    padding:3.5rem 3rem;
+    position:relative;
+    overflow:hidden;
+    animation:rise .8s cubic-bezier(.16,1,.3,1) both;
+  }
+  @keyframes rise{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:none}}
+  .card::before{
+    content:"";position:absolute;top:0;left:0;right:0;height:4px;
+    background:linear-gradient(90deg,var(--accent),#4f8cff,var(--accent));
+  }
+  .badge{
+    display:inline-block;font-family:'Courier New',monospace;
+    font-size:.7rem;letter-spacing:.18em;text-transform:uppercase;
+    color:var(--accent);background:var(--accent-soft);
+    padding:.4rem .8rem;border-radius:2px;margin-bottom:1.8rem;
+  }
+  h1{
+    font-size:2.1rem;line-height:1.15;font-weight:normal;
+    letter-spacing:-.01em;margin-bottom:1.2rem;
+  }
+  h1 .mark{color:var(--accent);font-style:italic}
+  p{font-size:1.05rem;line-height:1.7;color:var(--muted);margin-bottom:1.1rem}
+  .divider{height:1px;background:var(--line);margin:2rem 0}
+  .legal{
+    font-size:.82rem;line-height:1.6;color:var(--muted);
+    font-family:Georgia,serif;
+  }
+  .legal strong{color:var(--ink);font-weight:normal;font-style:italic}
+  .foot{
+    margin-top:2.2rem;font-family:'Courier New',monospace;
+    font-size:.72rem;letter-spacing:.08em;color:var(--ink);
+    display:flex;justify-content:space-between;flex-wrap:wrap;gap:.6rem;
+  }
+  .foot a{color:var(--accent);text-decoration:none;border-bottom:1px solid var(--accent-soft)}
+  @media(max-width:520px){
+    .card{padding:2.4rem 1.6rem}
+    h1{font-size:1.65rem}
+  }
+</style>
+</head>
+<body>
+  <main class="card">
+    <span class="badge">Servicio temporalmente no disponible</span>
+    <h1>Estamos adaptando <span class="mark">Centro</span> de NextHorizont&nbsp;AI a la nueva normativa de Inteligencia Artificial.</h1>
+    <p>
+      Hemos pausado voluntariamente el acceso mientras completamos su adecuación
+      al Reglamento Europeo de IA (UE&nbsp;2024/1689) y a la legislación española
+      en materia de gobernanza de la inteligencia artificial.
+    </p>
+    <p>
+      Nuestro compromiso con un uso responsable, transparente y supervisado de la IA
+      es prioritario. Volveremos en cuanto el servicio cumpla plenamente con estos
+      requisitos.
+    </p>
+    <div class="divider"></div>
+    <p class="legal">
+      <strong>Nota legal:</strong> durante este periodo no se recogen ni procesan
+      datos personales a través de esta web, y no hay ningún sistema de IA en
+      funcionamiento accesible al público en este dominio.
+    </p>
+    <div class="foot">
+      <span>NextHorizont&nbsp;AI&nbsp;·&nbsp;El&nbsp;Ejido,&nbsp;Almería</span>
+      <a href="mailto:contacto@nexthorizont.com">contacto@nexthorizont.com</a>
+    </div>
+  </main>
+</body>
+</html>
