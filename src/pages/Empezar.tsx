@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
+import { FUNCTIONS_BASE, supabaseHeaders } from '../lib/backend'
 import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import { Clock, ShieldCheck, FileText, ChevronDown } from 'lucide-react'
@@ -14,7 +15,7 @@ gsap.registerPlugin(ScrollTrigger)
  *   1. User clicks "Empezar evaluación gratis" CTA on home
  *   2. Lands here, reads the value prop (5 min, RGPD, doctor reads first)
  *   3. Fills in name + phone + consent
- *   4. POST to /api/registro (Vercel Edge Function)
+ *   4. POST a la Supabase Edge Function landing-registro
  *   5. Edge Function generates a token, inserts in clinica_enlaces_pacientes
  *   6. Returns redirectUrl pointing to formulario1.nexthorizont.ai/?t=...
  *   7. Browser navigates to the questionnaire
@@ -36,7 +37,7 @@ gsap.registerPlugin(ScrollTrigger)
  *     retry-friendly tone ("Inténtalo de nuevo").
  */
 
-// Same regex as the Edge Function (api/registro.ts) for client-side
+// Same regex as the Edge Function (landing-registro) for client-side
 // validation. Defense in depth: identical rules client and server.
 const NAME_REGEX = /^[\p{L}\p{M}\s'’\-\.]{3,80}$/u
 const PHONE_REGEX = /^[+\d\s\-()]{6,20}$/
@@ -104,9 +105,9 @@ export default function Empezar() {
     setSubmitState({ status: 'submitting' })
 
     try {
-      const res = await fetch('/api/registro', {
+      const res = await fetch(`${FUNCTIONS_BASE}/landing-registro`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { ...supabaseHeaders, 'Content-Type': 'application/json' },
         body: JSON.stringify({
           nombre: nombre.trim(),
           telefono: telefono.trim(),

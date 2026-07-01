@@ -19,7 +19,7 @@ gsap.registerPlugin(ScrollTrigger)
  *   - Black/white palette (no blue gradients) — matches the rest of the site
  *   - €, not $
  *   - 3 plans (no Monthly/Yearly toggle — irrelevant for a clinic)
- *   - Precios resueltos en runtime desde Supabase (public.diettissima_products) vía /api/products — NUNCA hardcodeados
+ *   - Precios resueltos en runtime desde Supabase (public.diettissima_products) vía PostgREST (RLS, anon key) — NUNCA hardcodeados
  *   - secondaryPrice en la tarjeta Seguimiento = plan de mantenimiento mensual
  *   - Programa 90D is the highlighted plan (Glare Card sheen + thick black border + 'Recomendado' badge)
  *   - 3D TiltCard wraps every card (max 6° tilt — subtle medical feel)

@@ -1,9 +1,11 @@
 /**
  * Pricing — única fuente de verdad: Supabase public.diettissima_products,
- * servida por la Edge Function GET /api/products (con cache).
+ * leída directamente vía PostgREST con la anon key (RLS: SELECT público
+ * solo de productos activos).
  * Regla de proyecto: PROHIBIDO hardcodear precios en el código.
  */
 import { useEffect, useState } from 'react'
+import { SUPABASE_URL, supabaseHeaders } from './backend'
 
 export type BillingPeriod = 'one_time' | 'monthly'
 
@@ -20,7 +22,10 @@ let cache: PriceMap | null = null
 let inflight: Promise<PriceMap> | null = null
 
 async function fetchPrices(): Promise<PriceMap> {
-  const res = await fetch('/api/products', { headers: { Accept: 'application/json' } })
+  const res = await fetch(
+    `${SUPABASE_URL}/rest/v1/diettissima_products?select=code,name,price_eur,billing_period&active=eq.true&order=sort_order.asc`,
+    { headers: { ...supabaseHeaders, Accept: 'application/json' } },
+  )
   if (!res.ok) throw new Error(`products ${res.status}`)
   const rows: Array<{
     code: string
