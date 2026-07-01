@@ -3,6 +3,7 @@ import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import { CheckCheck, Stethoscope, Pill, Sparkles, ClipboardCheck, ShieldCheck, Video } from 'lucide-react'
 import NumberFlow from '@number-flow/react'
+import { usePricing } from '../lib/pricing'
 import WordsPullUp from '../components/effects/WordsPullUp'
 import TiltCard from '../components/effects/TiltCard'
 import GlareCard from '../components/effects/GlareCard'
@@ -11,14 +12,15 @@ import { Card, CardContent, CardHeader } from '../components/ui/card'
 gsap.registerPlugin(ScrollTrigger)
 
 /**
- * Pricing Section — Centro NextHorizont Health
+ * Pricing Section — Diettissima
  *
  * Visual style adapted from a 21st.dev/shadcn pricing component, but tailored
  * for a sober medical brand:
  *   - Black/white palette (no blue gradients) — matches the rest of the site
  *   - €, not $
  *   - 3 plans (no Monthly/Yearly toggle — irrelevant for a clinic)
- *   - secondaryPrice on Seguimiento card (79€ visit + 29€ prescription renewal)
+ *   - Precios resueltos en runtime desde Supabase (public.diettissima_products) vía /api/products — NUNCA hardcodeados
+ *   - secondaryPrice en la tarjeta Seguimiento = plan de mantenimiento mensual
  *   - Programa 90D is the highlighted plan (Glare Card sheen + thick black border + 'Recomendado' badge)
  *   - 3D TiltCard wraps every card (max 6° tilt — subtle medical feel)
  *   - WordsPullUp on the section heading (kept from previous implementation)
@@ -36,9 +38,9 @@ type Feature = { text: string; icon: React.ReactNode }
 type Plan = {
   name: string
   description: string
-  price: number
+  priceCode: string
   period: string
-  secondaryPrice: { price: number; label: string } | null
+  secondaryPrice: { priceCode: string; label: string } | null
   buttonText: string
   highlighted: boolean
   features: Feature[]
@@ -49,7 +51,7 @@ const plans: Plan[] = [
   {
     name: 'Primera consulta',
     description: 'Para quienes empiezan: evaluación clínica completa y plan personalizado.',
-    price: 99,
+    priceCode: 'primera_consulta',
     period: 'primera visita',
     secondaryPrice: null,
     buttonText: 'Reservar',
@@ -69,9 +71,9 @@ const plans: Plan[] = [
   {
     name: 'Seguimiento',
     description: 'Para pacientes en tratamiento: revisión clínica continua y ajuste de dosis.',
-    price: 79,
+    priceCode: 'seguimiento',
     period: 'visita seguimiento',
-    secondaryPrice: { price: 29, label: 'renovación de receta sin consulta' },
+    secondaryPrice: { priceCode: 'mantenimiento_mensual', label: 'plan de mantenimiento mensual' },
     buttonText: 'Reservar',
     highlighted: false,
     features: [
@@ -89,7 +91,7 @@ const plans: Plan[] = [
   {
     name: 'Programa 90D',
     description: 'El programa completo: acompañamiento médico durante 90 días con resultados sostenibles.',
-    price: 499,
+    priceCode: 'reset_metabolico_90',
     period: 'pago único',
     secondaryPrice: null,
     buttonText: 'Inscribirme',
@@ -227,7 +229,7 @@ export default function PricingSection() {
           />
           <FAQItem
             q="¿Hay financiación?"
-            a="Sí. Pago en 3 plazos sin intereses con Klarna disponible en el checkout."
+            a="Consulta las opciones de pago y financiación disponibles al reservar tu consulta."
           />
           <FAQItem
             q="¿Reembolso?"
@@ -245,6 +247,9 @@ export default function PricingSection() {
 
 function PricingCardContent({ plan }: { plan: Plan }) {
   const isHighlight = plan.highlighted
+  const { prices } = usePricing()
+  const product = prices?.[plan.priceCode]
+  const secondaryProduct = plan.secondaryPrice ? prices?.[plan.secondaryPrice.priceCode] : undefined
 
   const handleCTA = () => {
     document.querySelector('#hero')?.scrollIntoView({ behavior: 'smooth' })
@@ -318,7 +323,7 @@ function PricingCardContent({ plan }: { plan: Plan }) {
               alignItems: 'baseline',
             }}
           >
-            <NumberFlow value={plan.price} />
+            {product ? <NumberFlow value={product.priceEur} /> : <span>—</span>}
             <span style={{ marginLeft: '2px' }}>€</span>
           </span>
           <span
@@ -355,8 +360,8 @@ function PricingCardContent({ plan }: { plan: Plan }) {
                 alignItems: 'baseline',
               }}
             >
-              <NumberFlow value={plan.secondaryPrice.price} />
-              <span style={{ marginLeft: '2px' }}>€</span>
+              {secondaryProduct ? <NumberFlow value={secondaryProduct.priceEur} /> : <span>—</span>}
+              <span style={{ marginLeft: '2px' }}>€/mes</span>
             </span>
             <span
               style={{

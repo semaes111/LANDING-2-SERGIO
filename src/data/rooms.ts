@@ -6,7 +6,8 @@ export interface Room {
   tagline: string
   description: string[]
   features: string[]
-  price: string
+  /** Código en Supabase public.diettissima_products — el precio se resuelve en runtime, nunca aquí */
+  priceCode: string
   priceNote: string
   sqm: string
   occupancy: string
@@ -21,7 +22,7 @@ export const rooms: Room[] = [
     img: '/images/program-reset.jpg',
     tagline: 'Programa integral de transformación metabólica con seguimiento médico continuo.',
     description: [
-      'El programa Reset Metabólico 90 días es el protocolo principal de Centro NextHorizont Health. Diseñado en torno a una evaluación metabólica completa, combina tratamiento farmacológico individualizado (GLP-1), educación nutricional personalizada y seguimiento asistido por IA.',
+      'El programa Reset Metabólico 90 días es el protocolo principal de Diettissima. Diseñado en torno a una evaluación metabólica completa, combina tratamiento farmacológico individualizado (GLP-1), educación nutricional personalizada y seguimiento asistido por IA.',
       'Cada paciente recibe un plan de dosis escalonado, recordatorios de adherencia, revisiones médicas programadas y acceso a la comunidad privada. La medicina del siglo XXI combina rigor clínico, tecnología responsable y trato humano.',
     ],
     features: [
@@ -32,7 +33,7 @@ export const rooms: Room[] = [
       'Garantía de satisfacción 30 días',
       'Telemedicina incluida',
     ],
-    price: '499€',
+    priceCode: 'reset_metabolico_90',
     priceNote: 'pago único, incluye 90 días',
     sqm: '90 días',
     occupancy: '1 paciente',
@@ -57,7 +58,7 @@ export const rooms: Room[] = [
       'WhatsApp directo para preguntas',
       'Seguimiento telefónico a 7 días',
     ],
-    price: '99€',
+    priceCode: 'primera_consulta',
     priceNote: 'primera visita',
     sqm: 'Consulta',
     occupancy: '1 paciente',
@@ -81,7 +82,7 @@ export const rooms: Room[] = [
       'Actualizaciones de contenido gratuitas',
       'Acceso desde app y web',
     ],
-    price: '149€',
+    priceCode: 'curso_nutricion_clinica',
     priceNote: 'pago único, acceso de por vida',
     sqm: '12 módulos',
     occupancy: '1 estudiante',
@@ -105,7 +106,7 @@ export const rooms: Room[] = [
       'Compatible con programa Reset',
       'Acceso inmediato tras compra',
     ],
-    price: '49€',
+    priceCode: 'guia_aprender_comer',
     priceNote: 'guía digital descargable',
     sqm: '1 guía',
     occupancy: '1 usuario',
@@ -130,8 +131,8 @@ export const rooms: Room[] = [
       'Acceso a sesiones live grupales',
       'Cancelable en cualquier momento',
     ],
-    price: '79€',
-    priceNote: '/ mes, sin permanencia',
+    priceCode: 'control_peso_premium',
+    priceNote: 'sin permanencia',
     sqm: 'Mensual',
     occupancy: '1 paciente',
     bed: 'Online + Presencial',
@@ -154,7 +155,7 @@ export const rooms: Room[] = [
       'Foro privado de profesionales',
       'Certificado con créditos de formación',
     ],
-    price: '299€',
+    priceCode: 'programa_profesionales',
     priceNote: 'pago único, acceso 1 año',
     sqm: '20 h',
     occupancy: '1 profesional',

@@ -67,9 +67,8 @@ export default function Footer() {
           <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: '10px' }}>
             <FooterLink to="/quienes-somos">Sobre nosotros</FooterLink>
             <FooterLink to="/#equipo">Equipo</FooterLink>
-            <FooterLink to="/#ubicacion">Centro NextHorizont Health</FooterLink>
+            <FooterLink to="/#ubicacion">Diettissima</FooterLink>
             <FooterLink to="/#hero">Telemedicina</FooterLink>
-            <FooterLink to="https://cursos.nexthorizont.com" external>Campus de cursos ↗</FooterLink>
             <FooterLink to="/#ubicacion">Contacto</FooterLink>
           </ul>
         </div>
@@ -89,7 +88,7 @@ export default function Footer() {
             Compañía
           </p>
           <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: '10px' }}>
-            <FooterLink to="/">Sobre NextHorizont</FooterLink>
+            <FooterLink to="/">Sobre Diettissima</FooterLink>
             <FooterLink to="/">Press kit</FooterLink>
             <FooterLink to="/">Carreras</FooterLink>
             <FooterLink to="/">Blog</FooterLink>
@@ -191,8 +190,8 @@ export default function Footer() {
           NextHorizont AI SL · Centro autorizado por la Consejería de Salud ·
           Dr. Sergio Martínez Escobar · Médico colegiado nº 04/1809464 · Colegio de Médicos de Almería.
           Información médica con finalidad informativa y educativa; no sustituye consulta presencial.
-          Tratamientos farmacológicos sujetos a prescripción individualizada. Cumplimiento RGPD y EU AI Act.
-          DPO: dpo@nexthorizont.com
+          Tratamientos farmacológicos sujetos a prescripción individualizada. Cumplimiento RGPD y EU AI Act. ·
+          NICA nº [PENDIENTE — registro sanitario Junta de Andalucía] · DPO: dpo@nexthorizont.com
         </p>
       </div>
 
@@ -217,7 +216,7 @@ export default function Footer() {
             userSelect: 'none',
           }}
         >
-          NEXTHORIZONT
+          DIETTISSIMA
         </span>
       </div>
     </footer>

@@ -97,7 +97,7 @@ export default function Spatial() {
             textTransform: 'uppercase',
           }}
         >
-          Salud Metabólica · Centro NextHorizont Health · El Ejido
+          Salud Metabólica · Diettissima · El Ejido
         </span>
 
         <h1
@@ -149,7 +149,7 @@ export default function Spatial() {
               fontFamily: '"Helvetica Neue", sans-serif',
             }}
           >
-            Reservar consulta 99€
+            Reserva tu consulta
           </button>
           <button
             onClick={() => document.querySelector('#works')?.scrollIntoView({ behavior: 'smooth' })}

@@ -8,7 +8,7 @@ import TextRevealOnScroll from '../components/effects/TextRevealOnScroll'
 gsap.registerPlugin(ScrollTrigger)
 
 /**
- * /empezar — Patient registration entry page for Centro NextHorizont Health.
+ * /empezar — Patient registration entry page for Diettissima.
  *
  * This page is the first step of the new patient funnel:
  *   1. User clicks "Empezar evaluación gratis" CTA on home
@@ -474,7 +474,7 @@ export default function Empezar() {
             />
             <FaqItem
               q="¿Es realmente gratis? ¿Qué hay después?"
-              a="El cuestionario clínico es gratis y sin compromiso. Te sirve a ti (entiendes tu situación) y a tu doctor (te recibe sabiendo lo que importa). Si después decides venir a consulta, los precios son 99€ la primera, 79€ los seguimientos mensuales."
+              a="El cuestionario clínico es gratis y sin compromiso. Te sirve a ti (entiendes tu situación) y a tu doctor (te recibe sabiendo lo que importa). Si después decides venir a consulta, tienes los precios de primera consulta y seguimiento siempre actualizados en la sección de precios de esta web."
             />
             <FaqItem
               q="¿Quién verá mis datos?"
@@ -482,7 +482,7 @@ export default function Empezar() {
             />
             <FaqItem
               q="¿Y si no quiero ir a consulta presencial?"
-              a="Sin problema. Algunos pacientes vienen sólo a por evaluación de prescripción (29€) o seguimiento online. El cuestionario te sirve igual: te dice qué tipo de abordaje encaja con tu caso."
+              a="Sin problema. El seguimiento puede hacerse íntegramente online por telemedicina. El cuestionario te sirve igual: te dice qué tipo de abordaje encaja con tu caso."
             />
             <FaqItem
               q="¿Y si me equivoco al rellenar?"

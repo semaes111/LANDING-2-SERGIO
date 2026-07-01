@@ -71,7 +71,7 @@ export default function Hero() {
    */
   const handleWhatsAppClick = () => {
     const text = encodeURIComponent(
-      'Hola, me interesa Centro NextHorizont Health y querría preguntar por una consulta.',
+      'Hola, me interesa Diettissima y querría preguntar por una consulta.',
     )
     const url = `https://wa.me/34640056272?text=${text}`
     window.open(url, '_blank', 'noopener,noreferrer')
@@ -199,7 +199,7 @@ export default function Hero() {
               textTransform: 'uppercase',
             }}
           >
-            NEXTHORIZONT · Consultas & Reservas
+            DIETTISSIMA · Consultas & Reservas
           </p>
         </div>
       </div>

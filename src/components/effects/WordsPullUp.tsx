@@ -38,7 +38,7 @@ export default function WordsPullUp({
   stagger = 0.12,
   yOffset = 20,
 }: WordsPullUpProps) {
-  const ref = useRef<HTMLSpanElement>(null)
+  const ref = useRef<HTMLDivElement>(null)
   const inView = useInView(ref, { once: true, margin: '0px 0px -10% 0px' })
   const words = text.split(' ')
 
@@ -46,7 +46,7 @@ export default function WordsPullUp({
 
   return (
     <Tag
-      ref={ref as React.RefObject<HTMLSpanElement>}
+      ref={ref}
       style={{
         ...style,
         display: style?.display ?? 'block',

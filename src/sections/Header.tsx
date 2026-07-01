@@ -8,7 +8,7 @@ interface HeaderProps {
 }
 
 /**
- * Header — Centro NextHorizont Health top navigation.
+ * Header — Diettissima top navigation.
  *
  * Layout:
  *   [Logo]        [Programas | Cómo funciona | Contacto | Sobre nosotros | EMPEZAR EVALUACIÓN]
@@ -54,7 +54,6 @@ type NavItem =
 const navItems: NavItem[] = [
   { label: 'Programas',      target: '#works' },
   { label: 'Cómo funciona',  target: '#capabilities' },
-  { label: 'Cursos',         href: 'https://cursos.nexthorizont.com', external: true },
   { label: 'Contacto',       target: '#footer' },
   { label: 'Sobre nosotros', route: '/quienes-somos' },
 ]
@@ -199,7 +198,7 @@ export default function Header({ scrollRef, forceLight = false }: HeaderProps) {
           }
         }}
       >
-        NEXTHORIZONT
+        DIETTISSIMA
       </div>
 
       <nav
