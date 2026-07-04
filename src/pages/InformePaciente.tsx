@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
+import { FUNCTIONS_BASE, supabaseHeaders } from '../lib/backend'
 import { useParams, Link } from 'react-router'
 import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
@@ -24,7 +25,7 @@ gsap.registerPlugin(ScrollTrigger)
  *      after they complete the questionnaire).
  *   2. They click the link, browser navigates here.
  *   3. We extract :token from URL params.
- *   4. We call /api/informe?token=XXX (Vercel Edge Function).
+ *   4. Llamamos a la Supabase Edge Function landing-informe?token=XXX.
  *   5. Edge Function validates token, increments view counter, returns JSON.
  *   6. We render one of FOUR visual states based on `informe.estado`:
  *        - 'verde'      → green: indication candidate
@@ -59,7 +60,7 @@ gsap.registerPlugin(ScrollTrigger)
  */
 
 // ============================================================================
-// Types matching the Edge Function response (api/informe.ts)
+// Types matching the Edge Function response (landing-informe)
 // ============================================================================
 
 type Estado = 'verde' | 'amarillo' | 'rojo' | 'incompleto'
@@ -161,9 +162,9 @@ export default function InformePaciente() {
       }
 
       try {
-        const res = await fetch(`/api/informe?token=${encodeURIComponent(token)}`, {
+        const res = await fetch(`${FUNCTIONS_BASE}/landing-informe?token=${encodeURIComponent(token)}`, {
           method: 'GET',
-          headers: { Accept: 'application/json' },
+          headers: { ...supabaseHeaders, Accept: 'application/json' },
         })
         const data = (await res.json().catch(() => ({}))) as
           | InformeResponse

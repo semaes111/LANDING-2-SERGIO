@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
+import { FUNCTIONS_BASE, supabaseHeaders } from '../lib/backend'
 import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import { Clock, ShieldCheck, FileText, ChevronDown } from 'lucide-react'
@@ -8,13 +9,13 @@ import TextRevealOnScroll from '../components/effects/TextRevealOnScroll'
 gsap.registerPlugin(ScrollTrigger)
 
 /**
- * /empezar — Patient registration entry page for Centro NextHorizont Health.
+ * /empezar — Patient registration entry page for Diettissima.
  *
  * This page is the first step of the new patient funnel:
  *   1. User clicks "Empezar evaluación gratis" CTA on home
  *   2. Lands here, reads the value prop (5 min, RGPD, doctor reads first)
  *   3. Fills in name + phone + consent
- *   4. POST to /api/registro (Vercel Edge Function)
+ *   4. POST a la Supabase Edge Function landing-registro
  *   5. Edge Function generates a token, inserts in clinica_enlaces_pacientes
  *   6. Returns redirectUrl pointing to formulario1.nexthorizont.ai/?t=...
  *   7. Browser navigates to the questionnaire
@@ -36,7 +37,7 @@ gsap.registerPlugin(ScrollTrigger)
  *     retry-friendly tone ("Inténtalo de nuevo").
  */
 
-// Same regex as the Edge Function (api/registro.ts) for client-side
+// Same regex as the Edge Function (landing-registro) for client-side
 // validation. Defense in depth: identical rules client and server.
 const NAME_REGEX = /^[\p{L}\p{M}\s'’\-\.]{3,80}$/u
 const PHONE_REGEX = /^[+\d\s\-()]{6,20}$/
@@ -104,9 +105,9 @@ export default function Empezar() {
     setSubmitState({ status: 'submitting' })
 
     try {
-      const res = await fetch('/api/registro', {
+      const res = await fetch(`${FUNCTIONS_BASE}/landing-registro`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { ...supabaseHeaders, 'Content-Type': 'application/json' },
         body: JSON.stringify({
           nombre: nombre.trim(),
           telefono: telefono.trim(),
@@ -474,7 +475,7 @@ export default function Empezar() {
             />
             <FaqItem
               q="¿Es realmente gratis? ¿Qué hay después?"
-              a="El cuestionario clínico es gratis y sin compromiso. Te sirve a ti (entiendes tu situación) y a tu doctor (te recibe sabiendo lo que importa). Si después decides venir a consulta, los precios son 99€ la primera, 79€ los seguimientos mensuales."
+              a="El cuestionario clínico es gratis y sin compromiso. Te sirve a ti (entiendes tu situación) y a tu doctor (te recibe sabiendo lo que importa). Si después decides venir a consulta, tienes los precios de primera consulta y seguimiento siempre actualizados en la sección de precios de esta web."
             />
             <FaqItem
               q="¿Quién verá mis datos?"
@@ -482,7 +483,7 @@ export default function Empezar() {
             />
             <FaqItem
               q="¿Y si no quiero ir a consulta presencial?"
-              a="Sin problema. Algunos pacientes vienen sólo a por evaluación de prescripción (29€) o seguimiento online. El cuestionario te sirve igual: te dice qué tipo de abordaje encaja con tu caso."
+              a="Sin problema. El seguimiento puede hacerse íntegramente online por telemedicina. El cuestionario te sirve igual: te dice qué tipo de abordaje encaja con tu caso."
             />
             <FaqItem
               q="¿Y si me equivoco al rellenar?"

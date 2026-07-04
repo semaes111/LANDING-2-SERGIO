@@ -2,7 +2,7 @@ import { useEffect, useState, type CSSProperties } from 'react'
 import { motion, AnimatePresence, useReducedMotion } from 'motion/react'
 
 /**
- * Cookie Banner — AEPD-compliant consent banner for Centro NextHorizont Health.
+ * Cookie Banner — AEPD-compliant consent banner for Diettissima.
  *
  * Compliance checklist (AEPD Guía Cookies 2023 + RGPD art. 7 + LSSI-CE art. 22.2):
  *

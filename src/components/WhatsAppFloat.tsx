@@ -15,7 +15,7 @@ import { useEffect, useState } from 'react'
 
 // E.164 format without spaces — Evolution API instance 'alma'
 const WHATSAPP_NUMBER = '34640056272'
-const PREFILLED_MESSAGE = 'Hola, me interesa el programa de Centro NextHorizont Health. ¿Pueden darme más información?'
+const PREFILLED_MESSAGE = 'Hola, me interesa el programa de Diettissima. ¿Pueden darme más información?'
 
 export default function WhatsAppFloat() {
   const [visible, setVisible] = useState(false)
@@ -38,7 +38,7 @@ export default function WhatsAppFloat() {
       href={href}
       target="_blank"
       rel="noopener noreferrer"
-      aria-label="Contactar por WhatsApp con Centro NextHorizont Health"
+      aria-label="Contactar por WhatsApp con Diettissima"
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
       style={{
@@ -120,12 +120,12 @@ export default function WhatsAppFloat() {
           100% { transform: scale(1.6); opacity: 0;   }
         }
         @media (max-width: 768px) {
-          a[aria-label="Contactar por WhatsApp con Centro NextHorizont Health"] {
+          a[aria-label="Contactar por WhatsApp con Diettissima"] {
             bottom: calc(96px + env(safe-area-inset-bottom, 0px)) !important;
           }
         }
         @media (max-width: 640px) {
-          a[aria-label="Contactar por WhatsApp con Centro NextHorizont Health"] span:first-child {
+          a[aria-label="Contactar por WhatsApp con Diettissima"] span:first-child {
             display: none;
           }
         }

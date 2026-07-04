@@ -8,7 +8,7 @@ interface HeaderProps {
 }
 
 /**
- * Header — Centro NextHorizont Health top navigation.
+ * Header — Diettissima top navigation.
  *
  * Layout:
  *   [Logo]        [Programas | Cómo funciona | Contacto | Sobre nosotros | EMPEZAR EVALUACIÓN]
@@ -54,7 +54,6 @@ type NavItem =
 const navItems: NavItem[] = [
   { label: 'Programas',      target: '#works' },
   { label: 'Cómo funciona',  target: '#capabilities' },
-  { label: 'Cursos',         href: 'https://cursos.nexthorizont.com', external: true },
   { label: 'Contacto',       target: '#footer' },
   { label: 'Sobre nosotros', route: '/quienes-somos' },
 ]
@@ -199,8 +198,28 @@ export default function Header({ scrollRef, forceLight = false }: HeaderProps) {
           }
         }}
       >
-        NEXTHORIZONT
+        DIETTISSIMA
       </div>
+
+      {/* EU AI Act (Reglamento UE 2024/1689, art. 50) — aviso visible de contenido con IA */}
+      <span
+        className="header-ai-badge"
+        style={{
+          fontSize: '11px',
+          letterSpacing: '0.14em',
+          textTransform: 'uppercase',
+          whiteSpace: 'nowrap',
+          padding: '4px 12px',
+          borderRadius: '999px',
+          color: textColor,
+          border: overHero
+            ? '1px solid rgba(255,255,255,0.35)'
+            : '1px solid rgba(0,0,0,0.25)',
+          transition: 'color 0.4s ease, border-color 0.4s ease',
+        }}
+      >
+        Contenido creado con IA
+      </span>
 
       <nav
         style={{
@@ -287,6 +306,7 @@ export default function Header({ scrollRef, forceLight = false }: HeaderProps) {
         @media (max-width: 900px) {
           .header-nav-items { display: none !important; }
           .header-hamburger { display: inline-flex !important; }
+          .header-ai-badge { display: none !important; }
         }
       `}</style>
     </header>

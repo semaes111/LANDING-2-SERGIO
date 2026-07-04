@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import { rooms } from '../data/rooms'
+import { usePricing, formatPriceEUR } from '../lib/pricing'
 
 interface RoomDetailProps {
   roomId: string
@@ -7,7 +8,7 @@ interface RoomDetailProps {
 }
 
 /**
- * WhatsApp number for inquiries (Centro NextHorizont Health).
+ * WhatsApp number for inquiries (Diettissima).
  * Same number used by WhatsAppFloat and MobileStickyCTA — Evolution API
  * instance 'alma'. Hardcoded as constant to keep the helper free of env vars
  * (this is a frontend-only deploy without backend secrets management).
@@ -16,12 +17,13 @@ const WHATSAPP_NUMBER = '34640056272'
 
 function buildWhatsAppUrl(roomTitle: string) {
   const message = encodeURIComponent(
-    `Hola, me interesa el programa "${roomTitle}" del Centro NextHorizont Health. ¿Pueden darme más información?`,
+    `Hola, me interesa el programa "${roomTitle}" del Diettissima. ¿Pueden darme más información?`,
   )
   return `https://wa.me/${WHATSAPP_NUMBER}?text=${message}`
 }
 
 export default function RoomDetail({ roomId, onBack }: RoomDetailProps) {
+  const { prices } = usePricing()
   const room = rooms.find((r) => r.id === roomId)
   const [hovered, setHovered] = useState(false)
 
@@ -286,7 +288,7 @@ export default function RoomDetail({ roomId, onBack }: RoomDetailProps) {
               marginBottom: '6px',
             }}
           >
-            {room.price}
+            {formatPriceEUR(prices?.[room.priceCode])}
           </p>
           <p
             style={{

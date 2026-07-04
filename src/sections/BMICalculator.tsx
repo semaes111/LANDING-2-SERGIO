@@ -308,7 +308,7 @@ export default function BMICalculator() {
                   />
                 </div>
                 <p style={{ fontSize: '12px', color: '#777777', lineHeight: 1.5 }}>
-                  Al enviar, aceptas recibir comunicaciones de NextHorizont con fines informativos y educativos. Puedes ejercer tus derechos RGPD en dpo@nexthorizont.com.
+                  Al enviar, aceptas recibir comunicaciones de Diettissima con fines informativos y educativos. Puedes ejercer tus derechos RGPD en dpo@nexthorizont.com.
                 </p>
                 <div style={{ display: 'flex', gap: '12px', marginTop: '8px' }}>
                   <button

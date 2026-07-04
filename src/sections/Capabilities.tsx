@@ -23,7 +23,7 @@ export default function Capabilities() {
     >
       <img
         src="/images/equipo-medico.jpg"
-        alt="Equipo médico de Centro NextHorizont Health en reunión clínica"
+        alt="Equipo médico de Diettissima en reunión clínica"
         style={{
           position: 'absolute',
           top: 0,
@@ -97,7 +97,7 @@ export default function Capabilities() {
                 maxWidth: '640px',
               }}
             >
-              Desde la primera consulta médica hasta el seguimiento a largo plazo, cada servicio de Centro NextHorizont Health está diseñado con rigor clínico y tecnología responsable. Un resumen de lo que ofrecemos a pacientes y profesionales:
+              Desde la primera consulta médica hasta el seguimiento a largo plazo, cada servicio de Diettissima está diseñado con rigor clínico y tecnología responsable. Un resumen de lo que ofrecemos a pacientes y profesionales:
             </p>
           </div>
           <div
@@ -171,7 +171,7 @@ export default function Capabilities() {
                 Consulta GLP-1
               </h3>
               <p style={{ fontSize: '14px', lineHeight: 1.5, color: 'rgba(255,255,255,0.7)', margin: 0 }}>
-                Primera visita con evaluación de candidatura y prescripción individualizada. Desde 99€.
+                Primera visita con evaluación de candidatura y prescripción individualizada.
               </p>
             </div>
           </BentoCard>
@@ -214,7 +214,7 @@ export default function Capabilities() {
                 Membership Reset
               </h3>
               <p style={{ fontSize: '14px', lineHeight: 1.5, color: 'rgba(255,255,255,0.7)', margin: 0 }}>
-                Revisión mensual, ajuste de dosis, app de seguimiento y WhatsApp directo. 79€/mes.
+                Revisión mensual, ajuste de dosis, app de seguimiento y WhatsApp directo.
               </p>
             </div>
           </BentoCard>
@@ -227,7 +227,7 @@ export default function Capabilities() {
                 Cursos de nutrición
               </h3>
               <p style={{ fontSize: '14px', lineHeight: 1.5, color: 'rgba(255,255,255,0.7)', margin: 0 }}>
-                Formación clínica basada en evidencia. Acceso al campus en cursos.nexthorizont.com.
+                Formación clínica basada en evidencia para pacientes y profesionales. Próximamente disponible.
               </p>
             </div>
           </BentoCard>
@@ -283,7 +283,7 @@ function OrbitalBadge() {
     path.setAttribute('id', pathId)
     path.setAttribute('fill', 'none')
 
-    const textContent = 'NEXTHORIZONT \u2022 SALUD METABOLICA \u2022 CENTRO NEXTHORIZONT HEALTH \u2022 '
+    const textContent = 'DIETTISSIMA \u2022 SALUD METABOLICA \u2022 DIETTISSIMA EL EJIDO \u2022 '
 
     const textEl = document.createElementNS('http://www.w3.org/2000/svg', 'text')
     textEl.setAttribute('fill', '#ffffff')

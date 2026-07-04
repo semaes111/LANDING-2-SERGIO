@@ -55,7 +55,7 @@ export default function Philosophy() {
         }}
       >
         <TextRevealOnScroll
-          text="La obesidad es una enfermedad metabólica crónica, no un fallo de carácter. En Centro NextHorizont Health combinamos rigor clínico, tecnología responsable y trato humano para devolver el control a nuestros pacientes."
+          text="La obesidad es una enfermedad metabólica crónica, no un fallo de carácter. En Diettissima combinamos rigor clínico, tecnología responsable y trato humano para devolver el control a nuestros pacientes."
           style={{
             flex: '1 1 700px',
             fontSize: 'clamp(28px, 4vw, 60px)',

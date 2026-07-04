@@ -18,7 +18,7 @@ import NumberTicker from '../components/effects/NumberTicker'
 gsap.registerPlugin(ScrollTrigger)
 
 /**
- * Quiénes Somos — about page for Centro NextHorizont Health.
+ * Quiénes Somos — about page for Diettissima.
  *
  * Editorial content adapted from a separate Kimi project ZIP that the user
  * uploaded. Selectively integrated: only the high-value differentiators,
@@ -176,7 +176,7 @@ export default function QuienesSomos() {
             Sobre nosotros
           </p>
           <WordsPullUp
-            text="Centro NextHorizont Health"
+            text="Diettissima"
             as="h1"
             style={{
               fontSize: 'clamp(40px, 6.5vw, 88px)',
@@ -329,7 +329,7 @@ export default function QuienesSomos() {
                 />
                 <img
                   src="/quienes-somos/dr-martinez.jpg"
-                  alt="Dr. Sergio Martínez Escobar — director médico de Centro NextHorizont Health"
+                  alt="Dr. Sergio Martínez Escobar — director médico de Diettissima"
                   loading="lazy"
                   decoding="async"
                   style={{
@@ -352,7 +352,7 @@ export default function QuienesSomos() {
                   marginBlockStart: '20px',
                 }}
               >
-                Director Médico de Centro NextHorizont Health · Especialista en Medicina Intensiva · Doctor en
+                Director Médico de Diettissima · Especialista en Medicina Intensiva · Doctor en
                 Medicina por la Universidad de Granada (Suma Cum Laude).
               </p>
             </div>
