@@ -191,6 +191,7 @@ export default function Footer() {
           Dr. Sergio Martínez Escobar · Médico colegiado nº 04/1809464 · Colegio de Médicos de Almería.
           Información médica con finalidad informativa y educativa; no sustituye consulta presencial.
           Tratamientos farmacológicos sujetos a prescripción individualizada. Cumplimiento RGPD y EU AI Act. ·
+          Contenido creado con inteligencia artificial. ·
           NICA nº [PENDIENTE — registro sanitario Junta de Andalucía] · DPO: dpo@nexthorizont.com
         </p>
       </div>
